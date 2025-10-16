@@ -21,21 +21,23 @@ import { UserRoles } from '../user/enums/user-roles.enum';
 
 @Controller('products')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
-@Roles(UserRoles.ADMIN)
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get()
+  @Roles(...Object.values(UserRoles))
   public async findAll(): Promise<ProductEntity[]> {
     return await this.productService.findAll();
   }
 
   @Get(':uuid')
+  @Roles(...Object.values(UserRoles))
   public async findOne(@Param() { uuid }: UuidDto): Promise<ProductEntity> {
     return await this.productService.findOne(uuid);
   }
 
   @Post()
+  @Roles(UserRoles.ADMIN)
   public async create(
     @Body() dto: CreateProductDto,
   ): Promise<DefaultResponseDto> {
@@ -43,6 +45,7 @@ export class ProductController {
   }
 
   @Patch(':uuid')
+  @Roles(UserRoles.ADMIN)
   public async update(
     @Param() { uuid }: UuidDto,
     @Body() dto: UpdateProductDto,
@@ -51,6 +54,7 @@ export class ProductController {
   }
 
   @Delete(':uuid')
+  @Roles(UserRoles.ADMIN)
   public async delete(@Param() { uuid }: UuidDto): Promise<DefaultResponseDto> {
     return await this.productService.delete(uuid);
   }
