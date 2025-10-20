@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
@@ -26,8 +27,10 @@ export class ProductController {
 
   @Get()
   @Roles(...Object.values(UserRoles))
-  public async findAll(): Promise<ProductEntity[]> {
-    return await this.productService.findAll();
+  public async findAll(
+    @Query('category') category?: string,
+  ): Promise<ProductEntity[]> {
+    return await this.productService.findAll(category);
   }
 
   @Get(':uuid')
