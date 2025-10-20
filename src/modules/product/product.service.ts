@@ -20,8 +20,9 @@ export class ProductService {
     private readonly responseMapper: ResponseMapper,
   ) {}
 
-  public async findAll(): Promise<ProductEntity[]> {
-    return await this.productRepository.find();
+  public async findAll(category?: string): Promise<ProductEntity[]> {
+    const where = category ? { category: { category } } : {};
+    return this.productRepository.find({ where });
   }
 
   public async findOne(uuid: string): Promise<ProductEntity> {
