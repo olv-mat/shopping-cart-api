@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
 import { ResponseMapper } from 'src/common/mappers/response.mapper';
 import { validateUpdatePayload } from 'src/common/utils/validate-update-payload.util';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { CreateProductDto } from './dtos/CreateProduct.dto';
 import { UpdateProductDto } from './dtos/UpdateProduct.dto';
 import { ProductEntity } from './entities/product.entity';
@@ -20,8 +20,17 @@ export class ProductService {
     private readonly responseMapper: ResponseMapper,
   ) {}
 
-  public async findAll(category?: string): Promise<ProductEntity[]> {
-    const where = category ? { category: { category } } : {};
+  public async findAll(filters: {
+    category?: string;
+    search?: string;
+  }): Promise<ProductEntity[]> {
+    const where: any = {};
+    if (filters.category) {
+      where.category = { category: filters.category };
+    }
+    if (filters.search) {
+      where.product = ILike(`%${filters.search}%`);
+    }
     return this.productRepository.find({ where });
   }
 
