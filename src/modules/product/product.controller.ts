@@ -29,8 +29,9 @@ export class ProductController {
   @Roles(...Object.values(UserRoles))
   public async findAll(
     @Query('category') category?: string,
+    @Query('search') search?: string,
   ): Promise<ProductEntity[]> {
-    return await this.productService.findAll(category);
+    return await this.productService.findAll({ category, search });
   }
 
   @Get(':uuid')
