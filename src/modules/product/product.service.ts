@@ -4,10 +4,15 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  IPaginationMeta,
+  IPaginationOptions,
+  paginate,
+} from 'nestjs-typeorm-paginate';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
 import { ResponseMapper } from 'src/common/mappers/response.mapper';
 import { validateUpdatePayload } from 'src/common/utils/validate-update-payload.util';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateProductDto } from './dtos/CreateProduct.dto';
 import { UpdateProductDto } from './dtos/UpdateProduct.dto';
 import { ProductEntity } from './entities/product.entity';
@@ -20,18 +25,36 @@ export class ProductService {
     private readonly responseMapper: ResponseMapper,
   ) {}
 
-  public async findAll(filters: {
-    category?: string;
-    search?: string;
-  }): Promise<ProductEntity[]> {
-    const where: any = {};
+  public async findAll(
+    filters: { category?: string; search?: string },
+    options: IPaginationOptions,
+  ): Promise<{
+    items: ProductEntity[];
+    meta: IPaginationMeta;
+  }> {
+    const queryBuilder = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.category', 'category');
+
     if (filters.category) {
-      where.category = { category: filters.category };
+      queryBuilder.andWhere('category.category = :category', {
+        category: filters.category,
+      });
     }
+
     if (filters.search) {
-      where.product = ILike(`%${filters.search}%`);
+      queryBuilder.andWhere('product.product ILIKE :search', {
+        search: `%${filters.search}%`,
+      });
     }
-    return this.productRepository.find({ where });
+
+    queryBuilder.orderBy('product.createdAt', 'DESC');
+    const { items, meta } = await paginate<ProductEntity>(
+      queryBuilder,
+      options,
+    );
+
+    return { items, meta };
   }
 
   public async findOne(uuid: string): Promise<ProductEntity> {
