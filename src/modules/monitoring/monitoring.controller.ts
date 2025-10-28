@@ -8,6 +8,6 @@ export class MonitoringController {
   @Get()
   @Header('Content-Type', 'text/plain')
   public async getMetrics(): Promise<String> {
-    return await this.monitoringService.getMetrics();
+    return this.monitoringService.getMetrics();
   }
 }
