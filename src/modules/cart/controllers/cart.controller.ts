@@ -17,7 +17,7 @@ export class CartController {
   @Get()
   @Roles(UserRoles.ADMIN)
   public async findAll(): Promise<CartEntity[]> {
-    return await this.cartService.findAll();
+    return this.cartService.findAll();
   }
 
   @Get(':uuid')
@@ -26,6 +26,6 @@ export class CartController {
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
   ) {
-    return await this.cartService.findOne(user, uuid);
+    return this.cartService.findOne(user, uuid);
   }
 }

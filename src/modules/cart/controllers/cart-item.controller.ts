@@ -24,7 +24,7 @@ export class CartItemController {
     @Param() { uuid }: UuidDto,
     @Body() dto: UpdateCartItemDto,
   ): Promise<MessageResponseDto> {
-    return await this.cartItemService.increase(user, uuid, dto);
+    return this.cartItemService.increase(user, uuid, dto);
   }
 
   @Patch('decrease')
@@ -34,6 +34,6 @@ export class CartItemController {
     @Param() { uuid }: UuidDto,
     @Body() dto: UpdateCartItemDto,
   ): Promise<MessageResponseDto> {
-    return await this.cartItemService.decrease(user, uuid, dto);
+    return this.cartItemService.decrease(user, uuid, dto);
   }
 }

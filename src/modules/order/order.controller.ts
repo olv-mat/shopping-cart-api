@@ -63,6 +63,6 @@ export class OrderController {
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
   ): Promise<DefaultResponseDto> {
-    return await this.orderService.delete(user, uuid);
+    return this.orderService.delete(user, uuid);
   }
 }

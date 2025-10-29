@@ -39,16 +39,13 @@ export class ProductController {
     items: ProductEntity[];
     meta: IPaginationMeta;
   }> {
-    return await this.productService.findAll(
-      { category, search },
-      { page, limit },
-    );
+    return this.productService.findAll({ category, search }, { page, limit });
   }
 
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
   public async findOne(@Param() { uuid }: UuidDto): Promise<ProductEntity> {
-    return await this.productService.findOne(uuid);
+    return this.productService.findOne(uuid);
   }
 
   @Post()
@@ -56,7 +53,7 @@ export class ProductController {
   public async create(
     @Body() dto: CreateProductDto,
   ): Promise<DefaultResponseDto> {
-    return await this.productService.create(dto);
+    return this.productService.create(dto);
   }
 
   @Patch(':uuid')
@@ -65,12 +62,12 @@ export class ProductController {
     @Param() { uuid }: UuidDto,
     @Body() dto: UpdateProductDto,
   ): Promise<DefaultResponseDto> {
-    return await this.productService.update(uuid, dto);
+    return this.productService.update(uuid, dto);
   }
 
   @Delete(':uuid')
   @Roles(UserRoles.ADMIN)
   public async delete(@Param() { uuid }: UuidDto): Promise<DefaultResponseDto> {
-    return await this.productService.delete(uuid);
+    return this.productService.delete(uuid);
   }
 }

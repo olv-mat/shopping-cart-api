@@ -27,7 +27,7 @@ export class UserController {
   @Get()
   @Roles(UserRoles.ADMIN)
   public async findAll(): Promise<UserEntity[]> {
-    return await this.userService.findAll();
+    return this.userService.findAll();
   }
 
   @Get(':uuid')
@@ -36,7 +36,7 @@ export class UserController {
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
   ): Promise<UserEntity> {
-    return await this.userService.findOne(user, uuid);
+    return this.userService.findOne(user, uuid);
   }
 
   @Patch(':uuid')
@@ -46,7 +46,7 @@ export class UserController {
     @Param() { uuid }: UuidDto,
     @Body() dto: UpdateUserDto,
   ): Promise<DefaultResponseDto> {
-    return await this.userService.update(user, uuid, dto);
+    return this.userService.update(user, uuid, dto);
   }
 
   @Delete(':uuid')
@@ -55,6 +55,6 @@ export class UserController {
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
   ): Promise<DefaultResponseDto> {
-    return await this.userService.delete(user, uuid);
+    return this.userService.delete(user, uuid);
   }
 }

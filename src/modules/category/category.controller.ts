@@ -26,19 +26,19 @@ export class CategoryController {
 
   @Get()
   public async findAll(): Promise<CategoryEntity[]> {
-    return await this.categoryService.findAll();
+    return this.categoryService.findAll();
   }
 
   @Get(':uuid')
   public async findOne(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
   ): Promise<CategoryEntity> {
-    return await this.categoryService.findOne(uuid);
+    return this.categoryService.findOne(uuid);
   }
 
   @Post()
   public async create(@Body() dto: CategoryDto): Promise<DefaultResponseDto> {
-    return await this.categoryService.create(dto);
+    return this.categoryService.create(dto);
   }
 
   @Put(':uuid')
@@ -46,13 +46,13 @@ export class CategoryController {
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
     @Body() dto: CategoryDto,
   ): Promise<DefaultResponseDto> {
-    return await this.categoryService.update(uuid, dto);
+    return this.categoryService.update(uuid, dto);
   }
 
   @Delete(':uuid')
   public async delete(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
   ): Promise<DefaultResponseDto> {
-    return await this.categoryService.delete(uuid);
+    return this.categoryService.delete(uuid);
   }
 }
