@@ -18,6 +18,7 @@ import { UpdateUserDto } from './dtos/UpdateUser.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserRoles } from './enums/user-roles.enum';
 import { UserService } from './user.service';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('users')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -26,12 +27,14 @@ export class UserController {
 
   @Get()
   @Roles(UserRoles.ADMIN)
+  @ApiOperation({ summary: 'Retrieve all users' })
   public async findAll(): Promise<UserEntity[]> {
     return this.userService.findAll();
   }
 
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
+  @ApiOperation({ summary: 'Retrieve a specific user' })
   public async findOne(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -41,6 +44,7 @@ export class UserController {
 
   @Patch(':uuid')
   @Roles(...Object.values(UserRoles))
+  @ApiOperation({ summary: 'Update a specific user' })
   public async update(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -51,6 +55,7 @@ export class UserController {
 
   @Delete(':uuid')
   @Roles(...Object.values(UserRoles))
+  @ApiOperation({ summary: 'Delete a specific user' })
   public async delete(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,

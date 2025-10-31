@@ -20,6 +20,7 @@ import { CreateProductDto } from './dtos/CreateProduct.dto';
 import { UpdateProductDto } from './dtos/UpdateProduct.dto';
 import { ProductEntity } from './entities/product.entity';
 import { ProductService } from './product.service';
+import { ApiOperation } from '@nestjs/swagger';
 
 // npm install nestjs-typeorm-paginate
 
@@ -30,6 +31,7 @@ export class ProductController {
 
   @Get()
   @Roles(...Object.values(UserRoles))
+  @ApiOperation({ summary: 'Retrieve all products with optional filters' })
   public async findAll(
     @Query('category') category?: string,
     @Query('search') search?: string,
@@ -44,12 +46,14 @@ export class ProductController {
 
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
+  @ApiOperation({ summary: 'Retrieve a specific product' })
   public async findOne(@Param() { uuid }: UuidDto): Promise<ProductEntity> {
     return this.productService.findOne(uuid);
   }
 
   @Post()
   @Roles(UserRoles.ADMIN)
+  @ApiOperation({ summary: 'Create a new product' })
   public async create(
     @Body() dto: CreateProductDto,
   ): Promise<DefaultResponseDto> {
@@ -58,6 +62,7 @@ export class ProductController {
 
   @Patch(':uuid')
   @Roles(UserRoles.ADMIN)
+  @ApiOperation({ summary: 'Update a specific product' })
   public async update(
     @Param() { uuid }: UuidDto,
     @Body() dto: UpdateProductDto,
@@ -67,6 +72,7 @@ export class ProductController {
 
   @Delete(':uuid')
   @Roles(UserRoles.ADMIN)
+  @ApiOperation({ summary: 'Delete a specific product' })
   public async delete(@Param() { uuid }: UuidDto): Promise<DefaultResponseDto> {
     return this.productService.delete(uuid);
   }
