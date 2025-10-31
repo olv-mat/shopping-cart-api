@@ -1,6 +1,6 @@
 import { Body, Controller, Param, Patch, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/common/decorators/user.decorator';
 import { MessageResponseDto } from 'src/common/dtos/MessageResponse.dto';
 import { UuidDto } from 'src/common/dtos/Uuid.dto';
@@ -19,6 +19,7 @@ export class CartItemController {
 
   @Patch('increase')
   @Roles(...Object.values(UserRoles))
+  @ApiOperation({ summary: 'Increase quantity of a cart item' })
   public async increase(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -29,6 +30,7 @@ export class CartItemController {
 
   @Patch('decrease')
   @Roles(...Object.values(UserRoles))
+  @ApiOperation({ summary: 'Decrease quantity of a cart item' })
   public async decrease(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
