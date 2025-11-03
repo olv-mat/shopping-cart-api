@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
@@ -6,20 +7,36 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import {
+  swaggerDescriptions,
+  swaggerExamples,
+} from 'src/common/utils/swagger-properties';
 
 export class RegisterDto {
+  @ApiProperty({
+    description: swaggerDescriptions.name,
+    example: swaggerExamples.name,
+  })
   @IsNotEmpty()
   @IsString()
   @MaxLength(255)
   @Matches(/\S/, { message: 'name cannot contain only spaces' })
   name: string;
 
+  @ApiProperty({
+    description: swaggerDescriptions.email,
+    example: swaggerExamples.email,
+  })
   @IsNotEmpty()
   @IsEmail()
   @MaxLength(255)
   @Matches(/\S/, { message: 'email cannot contain only spaces' })
   email: string;
 
+  @ApiProperty({
+    description: swaggerDescriptions.password,
+    example: swaggerExamples.password,
+  })
   @IsNotEmpty()
   @IsString()
   @MinLength(8)
