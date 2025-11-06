@@ -8,6 +8,7 @@ export const swaggerExamples = {
   productId: '7a8df8f3-aaf8-4c30-b175-d64cc6b530c8',
   quantity: 1,
   cartId: '5d5263d5-8e18-4845-8da0-3f550c18a99e',
+  categoryName: 'Eletronics',
 };
 
 export const swaggerDescriptions = {
@@ -20,4 +21,5 @@ export const swaggerDescriptions = {
   productId: 'Product Uuid',
   quantity: 'Product Quantity',
   cartId: 'Cart Uuid',
+  categoryName: 'Category Name',
 };
