@@ -8,8 +8,8 @@ import {
 
 export class CreateProductDto {
   @ApiProperty({
-    description: swaggerDescriptions.product,
-    example: swaggerExamples.product,
+    description: swaggerDescriptions.productName,
+    example: swaggerExamples.productName,
   })
   @IsNotEmpty()
   @IsString()
@@ -18,15 +18,15 @@ export class CreateProductDto {
   product: string;
 
   @ApiProperty({
-    description: swaggerDescriptions.category,
-    example: swaggerExamples.category,
+    description: swaggerDescriptions.categoryId,
+    example: swaggerExamples.categoryId,
   })
   @IsNotEmpty()
   @CategoryExists({ message: 'this category does not exist' })
   category: string;
 
   @ApiProperty({
-    description: swaggerExamples.price,
+    description: swaggerDescriptions.price,
     example: swaggerExamples.price,
   })
   @IsNotEmpty()

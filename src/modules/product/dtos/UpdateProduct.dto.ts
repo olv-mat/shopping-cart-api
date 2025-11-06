@@ -14,8 +14,8 @@ import {
 
 export class UpdateProductDto {
   @ApiPropertyOptional({
-    description: swaggerDescriptions.product,
-    example: swaggerExamples.product,
+    description: swaggerDescriptions.productName,
+    example: swaggerExamples.productName,
   })
   @IsOptional()
   @IsNotEmpty()
@@ -25,8 +25,8 @@ export class UpdateProductDto {
   product?: string;
 
   @ApiPropertyOptional({
-    description: swaggerDescriptions.category,
-    example: swaggerExamples.category,
+    description: swaggerDescriptions.categoryId,
+    example: swaggerExamples.categoryId,
   })
   @IsOptional()
   @IsNotEmpty()
@@ -34,7 +34,7 @@ export class UpdateProductDto {
   category?: string;
 
   @ApiPropertyOptional({
-    description: swaggerExamples.price,
+    description: swaggerDescriptions.price,
     example: swaggerExamples.price,
   })
   @IsOptional()
