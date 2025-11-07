@@ -10,6 +10,9 @@ import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 import { UserRoles } from 'src/modules/user/enums/user-roles.enum';
 import { UpdateCartItemDto } from '../dtos/UpdateCartItem.dto';
 import { CartItemService } from '../services/cart-item.service';
+import { endpointProperties } from 'src/common/utils/swagger-properties';
+
+const properties = endpointProperties.cartItem;
 
 @ApiTags('Cart Item')
 @Controller('carts/:uuid/items')
@@ -19,7 +22,7 @@ export class CartItemController {
 
   @Patch('increase')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation({ summary: 'Increase quantity of a cart item' })
+  @ApiOperation(properties.increase)
   public async increase(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -30,7 +33,7 @@ export class CartItemController {
 
   @Patch('decrease')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation({ summary: 'Decrease quantity of a cart item' })
+  @ApiOperation(properties.decrease)
   public async decrease(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,

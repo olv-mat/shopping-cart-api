@@ -8,16 +8,10 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import {
-  swaggerDescriptions,
-  swaggerExamples,
-} from 'src/common/utils/swagger-properties';
+import { dtoProperties } from 'src/common/utils/swagger-properties';
 
 export class UpdateUserDto {
-  @ApiPropertyOptional({
-    description: swaggerDescriptions.name,
-    example: swaggerExamples.name,
-  })
+  @ApiPropertyOptional(dtoProperties.name)
   @IsOptional()
   @IsNotEmpty()
   @IsString()
@@ -25,10 +19,7 @@ export class UpdateUserDto {
   @Matches(/\S/, { message: 'name cannot contain only spaces' })
   name?: string;
 
-  @ApiPropertyOptional({
-    description: swaggerDescriptions.email,
-    example: swaggerExamples.email,
-  })
+  @ApiPropertyOptional(dtoProperties.email)
   @IsOptional()
   @IsNotEmpty()
   @IsEmail()
@@ -36,10 +27,7 @@ export class UpdateUserDto {
   @Matches(/\S/, { message: 'email cannot contain only spaces' })
   email?: string;
 
-  @ApiPropertyOptional({
-    description: swaggerDescriptions.password,
-    example: swaggerExamples.password,
-  })
+  @ApiPropertyOptional(dtoProperties.password)
   @IsOptional()
   @IsNotEmpty()
   @IsString()

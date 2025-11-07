@@ -18,6 +18,9 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRoles } from '../user/enums/user-roles.enum';
 import { ApiOperation } from '@nestjs/swagger';
+import { endpointProperties } from 'src/common/utils/swagger-properties';
+
+const properties = endpointProperties.category;
 
 @Controller('categories')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -26,13 +29,13 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Retrieve all categories' })
+  @ApiOperation(properties.findAll)
   public async findAll(): Promise<CategoryEntity[]> {
     return this.categoryService.findAll();
   }
 
   @Get(':uuid')
-  @ApiOperation({ summary: 'Retrieve a specific category' })
+  @ApiOperation(properties.findOne)
   public async findOne(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
   ): Promise<CategoryEntity> {
@@ -40,13 +43,13 @@ export class CategoryController {
   }
 
   @Post()
-  @ApiOperation({ summary: 'Create a new category' })
+  @ApiOperation(properties.create)
   public async create(@Body() dto: CategoryDto): Promise<DefaultResponseDto> {
     return this.categoryService.create(dto);
   }
 
   @Put(':uuid')
-  @ApiOperation({ summary: 'Update a specific category' })
+  @ApiOperation(properties.update)
   public async update(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
     @Body() dto: CategoryDto,
@@ -55,7 +58,7 @@ export class CategoryController {
   }
 
   @Delete(':uuid')
-  @ApiOperation({ summary: 'Delete a specific category' })
+  @ApiOperation(properties.delete)
   public async delete(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
   ): Promise<DefaultResponseDto> {

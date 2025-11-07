@@ -9,6 +9,9 @@ import { UserRoles } from 'src/modules/user/enums/user-roles.enum';
 import { CartEntity } from '../entities/cart.entity';
 import { CartService } from '../services/cart.service';
 import { ApiOperation } from '@nestjs/swagger';
+import { endpointProperties } from 'src/common/utils/swagger-properties';
+
+const properties = endpointProperties.cart;
 
 @Controller('carts')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -17,14 +20,14 @@ export class CartController {
 
   @Get()
   @Roles(UserRoles.ADMIN)
-  @ApiOperation({ summary: 'Retrieve all carts' })
-  public async findAll(): Promise<CartEntity[]> {
+  @ApiOperation(properties.findAll)
+  public findAll(): Promise<CartEntity[]> {
     return this.cartService.findAll();
   }
 
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation({ summary: 'Retrieve a specific cart' })
+  @ApiOperation(properties.findOne)
   public async findOne(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,

@@ -7,36 +7,24 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import {
-  swaggerDescriptions,
-  swaggerExamples,
-} from 'src/common/utils/swagger-properties';
+import { dtoProperties } from 'src/common/utils/swagger-properties';
 
 export class RegisterDto {
-  @ApiProperty({
-    description: swaggerDescriptions.name,
-    example: swaggerExamples.name,
-  })
+  @ApiProperty(dtoProperties.name)
   @IsNotEmpty()
   @IsString()
   @MaxLength(255)
   @Matches(/\S/, { message: 'name cannot contain only spaces' })
   name: string;
 
-  @ApiProperty({
-    description: swaggerDescriptions.email,
-    example: swaggerExamples.email,
-  })
+  @ApiProperty(dtoProperties.email)
   @IsNotEmpty()
   @IsEmail()
   @MaxLength(255)
   @Matches(/\S/, { message: 'email cannot contain only spaces' })
   email: string;
 
-  @ApiProperty({
-    description: swaggerDescriptions.password,
-    example: swaggerExamples.password,
-  })
+  @ApiProperty(dtoProperties.password)
   @IsNotEmpty()
   @IsString()
   @MinLength(8)

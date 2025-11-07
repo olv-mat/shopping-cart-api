@@ -9,13 +9,16 @@ import { RegisterDto } from './dtos/Register.dto';
 import { RegisterResponseDto } from './dtos/RegisterResponse.dto';
 import { RolesGuard } from './guards/roles.guard';
 import { ApiOperation } from '@nestjs/swagger';
+import { endpointProperties } from 'src/common/utils/swagger-properties';
+
+const properties = endpointProperties.auth;
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  @ApiOperation({ summary: 'Register a new user' })
+  @ApiOperation(properties.register)
   public async register(
     @Body() dto: RegisterDto,
   ): Promise<RegisterResponseDto> {
@@ -25,13 +28,13 @@ export class AuthController {
   @Post('register/admin')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(UserRoles.ADMIN)
-  @ApiOperation({ summary: 'Register a new admin user' })
+  @ApiOperation(properties.registerAdmin)
   public async registerAdmin(@Body() dto: RegisterDto) {
     return this.authService.register(dto, true);
   }
 
   @Post('login')
-  @ApiOperation({ summary: 'Authenticate user' })
+  @ApiOperation(properties.login)
   public async login(@Body() dto: LoginDto): Promise<LoginResponseDto> {
     return this.authService.login(dto);
   }

@@ -8,17 +8,20 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation } from '@nestjs/swagger';
 import { User } from 'src/common/decorators/user.decorator';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
 import { UuidDto } from 'src/common/dtos/Uuid.dto';
 import { UserInterface } from 'src/common/interfaces/user.interface';
+import { endpointProperties } from 'src/common/utils/swagger-properties';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserRoles } from './enums/user-roles.enum';
 import { UserService } from './user.service';
-import { ApiOperation } from '@nestjs/swagger';
+
+const properties = endpointProperties.user;
 
 @Controller('users')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -27,14 +30,14 @@ export class UserController {
 
   @Get()
   @Roles(UserRoles.ADMIN)
-  @ApiOperation({ summary: 'Retrieve all users' })
+  @ApiOperation(properties.findAll)
   public async findAll(): Promise<UserEntity[]> {
     return this.userService.findAll();
   }
 
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation({ summary: 'Retrieve a specific user' })
+  @ApiOperation(properties.findOne)
   public async findOne(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -44,7 +47,7 @@ export class UserController {
 
   @Patch(':uuid')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation({ summary: 'Update a specific user' })
+  @ApiOperation(properties.update)
   public async update(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -55,7 +58,7 @@ export class UserController {
 
   @Delete(':uuid')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation({ summary: 'Delete a specific user' })
+  @ApiOperation(properties.delete)
   public async delete(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,

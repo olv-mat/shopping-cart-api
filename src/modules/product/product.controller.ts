@@ -21,8 +21,11 @@ import { UpdateProductDto } from './dtos/UpdateProduct.dto';
 import { ProductEntity } from './entities/product.entity';
 import { ProductService } from './product.service';
 import { ApiOperation } from '@nestjs/swagger';
+import { endpointProperties } from 'src/common/utils/swagger-properties';
 
 // npm install nestjs-typeorm-paginate
+
+const properties = endpointProperties.product;
 
 @Controller('products')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -31,7 +34,7 @@ export class ProductController {
 
   @Get()
   @Roles(...Object.values(UserRoles))
-  @ApiOperation({ summary: 'Retrieve all products with optional filters' })
+  @ApiOperation(properties.findAll)
   public async findAll(
     @Query('category') category?: string,
     @Query('search') search?: string,
@@ -46,14 +49,14 @@ export class ProductController {
 
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation({ summary: 'Retrieve a specific product' })
+  @ApiOperation(properties.findOne)
   public async findOne(@Param() { uuid }: UuidDto): Promise<ProductEntity> {
     return this.productService.findOne(uuid);
   }
 
   @Post()
   @Roles(UserRoles.ADMIN)
-  @ApiOperation({ summary: 'Create a new product' })
+  @ApiOperation(properties.create)
   public async create(
     @Body() dto: CreateProductDto,
   ): Promise<DefaultResponseDto> {
@@ -62,7 +65,7 @@ export class ProductController {
 
   @Patch(':uuid')
   @Roles(UserRoles.ADMIN)
-  @ApiOperation({ summary: 'Update a specific product' })
+  @ApiOperation(properties.update)
   public async update(
     @Param() { uuid }: UuidDto,
     @Body() dto: UpdateProductDto,
@@ -72,7 +75,7 @@ export class ProductController {
 
   @Delete(':uuid')
   @Roles(UserRoles.ADMIN)
-  @ApiOperation({ summary: 'Delete a specific product' })
+  @ApiOperation(properties.delete)
   public async delete(@Param() { uuid }: UuidDto): Promise<DefaultResponseDto> {
     return this.productService.delete(uuid);
   }

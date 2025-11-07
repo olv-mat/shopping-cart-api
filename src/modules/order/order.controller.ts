@@ -19,6 +19,9 @@ import { CreateOrderDto } from './dtos/CreateOrder.dto';
 import { OrderEntity } from './entities/order.entity';
 import { OrderService } from './order.service';
 import { ApiOperation } from '@nestjs/swagger';
+import { endpointProperties } from 'src/common/utils/swagger-properties';
+
+const properties = endpointProperties.oder;
 
 @Controller('orders')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -27,14 +30,14 @@ export class OrderController {
 
   @Get()
   @Roles(UserRoles.ADMIN)
-  @ApiOperation({ summary: 'Retrieve all orders' })
+  @ApiOperation(properties.findAll)
   public async findAll(): Promise<OrderEntity[]> {
     return this.orderService.findAll();
   }
 
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation({ summary: 'Retrieve a specific order' })
+  @ApiOperation(properties.findOne)
   public async findOne(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -44,7 +47,7 @@ export class OrderController {
 
   @Post()
   @Roles(...Object.values(UserRoles))
-  @ApiOperation({ summary: 'Create a new order' })
+  @ApiOperation(properties.create)
   public async create(
     @User() user: UserInterface,
     @Body() dto: CreateOrderDto,
@@ -54,7 +57,7 @@ export class OrderController {
 
   @Post(':uuid/pay')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation({ summary: 'Mark a specific order as paid' })
+  @ApiOperation(properties.pay)
   public async pay(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -64,7 +67,7 @@ export class OrderController {
 
   @Delete(':uuid')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation({ summary: 'Delete a specific order' })
+  @ApiOperation(properties.delete)
   public async delete(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
