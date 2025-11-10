@@ -40,6 +40,7 @@ export class ProductController {
   @Get()
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.findAll)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async findAll(
     @Query('category') category?: string,
@@ -56,6 +57,7 @@ export class ProductController {
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.findOne)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async findOne(@Param() { uuid }: UuidDto): Promise<ProductEntity> {
     return this.productService.findOne(uuid);
@@ -64,6 +66,7 @@ export class ProductController {
   @Post()
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.create)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async create(
     @Body() dto: CreateProductDto,
@@ -74,6 +77,7 @@ export class ProductController {
   @Patch(':uuid')
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.update)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async update(
     @Param() { uuid }: UuidDto,
@@ -85,6 +89,7 @@ export class ProductController {
   @Delete(':uuid')
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.delete)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async delete(@Param() { uuid }: UuidDto): Promise<DefaultResponseDto> {
     return this.productService.delete(uuid);

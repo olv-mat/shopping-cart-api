@@ -35,6 +35,7 @@ export class UserController {
   @Get()
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.findAll)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async findAll(): Promise<UserEntity[]> {
     return this.userService.findAll();
@@ -43,6 +44,7 @@ export class UserController {
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.findOne)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async findOne(
     @User() user: UserInterface,
@@ -54,6 +56,7 @@ export class UserController {
   @Patch(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.update)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async update(
     @User() user: UserInterface,
@@ -66,6 +69,7 @@ export class UserController {
   @Delete(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.delete)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async delete(
     @User() user: UserInterface,

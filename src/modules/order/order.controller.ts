@@ -35,6 +35,7 @@ export class OrderController {
   @Get()
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.findAll)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async findAll(): Promise<OrderEntity[]> {
     return this.orderService.findAll();
@@ -43,6 +44,7 @@ export class OrderController {
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.findOne)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async findOne(
     @User() user: UserInterface,
@@ -54,6 +56,7 @@ export class OrderController {
   @Post()
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.create)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async create(
     @User() user: UserInterface,
@@ -65,6 +68,7 @@ export class OrderController {
   @Post(':uuid/pay')
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.pay)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async pay(
     @User() user: UserInterface,
@@ -76,6 +80,7 @@ export class OrderController {
   @Delete(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.delete)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async delete(
     @User() user: UserInterface,

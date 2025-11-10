@@ -34,6 +34,7 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.registerAdmin)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async registerAdmin(@Body() dto: RegisterDto) {
     return this.authService.register(dto, true);

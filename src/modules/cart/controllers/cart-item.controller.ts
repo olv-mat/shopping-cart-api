@@ -27,6 +27,7 @@ export class CartItemController {
   @Patch('increase')
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.increase)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async increase(
     @User() user: UserInterface,
@@ -39,6 +40,7 @@ export class CartItemController {
   @Patch('decrease')
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.decrease)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async decrease(
     @User() user: UserInterface,

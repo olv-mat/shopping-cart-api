@@ -25,6 +25,7 @@ export class CartController {
   @Get()
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.findAll)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public findAll(): Promise<CartEntity[]> {
     return this.cartService.findAll();
@@ -33,6 +34,7 @@ export class CartController {
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.findOne)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async findOne(
     @User() user: UserInterface,

@@ -34,6 +34,7 @@ export class CategoryController {
 
   @Get()
   @ApiOperation(properties.findAll)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async findAll(): Promise<CategoryEntity[]> {
     return this.categoryService.findAll();
@@ -41,6 +42,7 @@ export class CategoryController {
 
   @Get(':uuid')
   @ApiOperation(properties.findOne)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async findOne(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
@@ -50,6 +52,7 @@ export class CategoryController {
 
   @Post()
   @ApiOperation(properties.create)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async create(@Body() dto: CategoryDto): Promise<DefaultResponseDto> {
     return this.categoryService.create(dto);
@@ -57,6 +60,7 @@ export class CategoryController {
 
   @Put(':uuid')
   @ApiOperation(properties.update)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async update(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
@@ -67,6 +71,7 @@ export class CategoryController {
 
   @Delete(':uuid')
   @ApiOperation(properties.delete)
+  @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.internalServerError)
   public async delete(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,

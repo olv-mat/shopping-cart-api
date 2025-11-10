@@ -98,4 +98,14 @@ export const endpointResponses = {
       },
     },
   },
+  unauthorized: {
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      example: {
+        message: 'Unauthorized',
+        statusCode: 401,
+      },
+    },
+  },
 };
