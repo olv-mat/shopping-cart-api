@@ -8,12 +8,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from 'src/common/decorators/user.decorator';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
 import { UuidDto } from 'src/common/dtos/Uuid.dto';
 import { UserInterface } from 'src/common/interfaces/user.interface';
-import { endpointProperties } from 'src/common/utils/swagger-properties';
+import {
+  endpointProperties,
+  endpointResponses,
+} from 'src/common/utils/swagger-properties';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
@@ -22,6 +25,7 @@ import { UserRoles } from './enums/user-roles.enum';
 import { UserService } from './user.service';
 
 const properties = endpointProperties.user;
+const responses = endpointResponses;
 
 @Controller('users')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -31,6 +35,7 @@ export class UserController {
   @Get()
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.findAll)
+  @ApiResponse(responses.internalServerError)
   public async findAll(): Promise<UserEntity[]> {
     return this.userService.findAll();
   }
@@ -38,6 +43,7 @@ export class UserController {
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.findOne)
+  @ApiResponse(responses.internalServerError)
   public async findOne(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -48,6 +54,7 @@ export class UserController {
   @Patch(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.update)
+  @ApiResponse(responses.internalServerError)
   public async update(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -59,6 +66,7 @@ export class UserController {
   @Delete(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.delete)
+  @ApiResponse(responses.internalServerError)
   public async delete(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,

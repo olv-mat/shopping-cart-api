@@ -86,3 +86,16 @@ export const endpointProperties = {
     delete: { summary: 'Delete a specific user' },
   },
 };
+
+export const endpointResponses = {
+  internalServerError: {
+    status: 500,
+    description: 'Internal Server Error',
+    schema: {
+      example: {
+        message: 'Internal Server Error',
+        statusCode: 500,
+      },
+    },
+  },
+};

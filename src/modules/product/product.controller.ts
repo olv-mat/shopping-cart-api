@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  InternalServerErrorException,
   Param,
   Patch,
   Post,
@@ -20,12 +21,16 @@ import { CreateProductDto } from './dtos/CreateProduct.dto';
 import { UpdateProductDto } from './dtos/UpdateProduct.dto';
 import { ProductEntity } from './entities/product.entity';
 import { ProductService } from './product.service';
-import { ApiOperation } from '@nestjs/swagger';
-import { endpointProperties } from 'src/common/utils/swagger-properties';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  endpointProperties,
+  endpointResponses,
+} from 'src/common/utils/swagger-properties';
 
 // npm install nestjs-typeorm-paginate
 
 const properties = endpointProperties.product;
+const responses = endpointResponses;
 
 @Controller('products')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -35,6 +40,7 @@ export class ProductController {
   @Get()
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.findAll)
+  @ApiResponse(responses.internalServerError)
   public async findAll(
     @Query('category') category?: string,
     @Query('search') search?: string,
@@ -50,6 +56,7 @@ export class ProductController {
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.findOne)
+  @ApiResponse(responses.internalServerError)
   public async findOne(@Param() { uuid }: UuidDto): Promise<ProductEntity> {
     return this.productService.findOne(uuid);
   }
@@ -57,6 +64,7 @@ export class ProductController {
   @Post()
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.create)
+  @ApiResponse(responses.internalServerError)
   public async create(
     @Body() dto: CreateProductDto,
   ): Promise<DefaultResponseDto> {
@@ -66,6 +74,7 @@ export class ProductController {
   @Patch(':uuid')
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.update)
+  @ApiResponse(responses.internalServerError)
   public async update(
     @Param() { uuid }: UuidDto,
     @Body() dto: UpdateProductDto,
@@ -76,6 +85,7 @@ export class ProductController {
   @Delete(':uuid')
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.delete)
+  @ApiResponse(responses.internalServerError)
   public async delete(@Param() { uuid }: UuidDto): Promise<DefaultResponseDto> {
     return this.productService.delete(uuid);
   }
