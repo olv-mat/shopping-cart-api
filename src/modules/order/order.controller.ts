@@ -36,6 +36,7 @@ export class OrderController {
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.findAll)
   @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
   @ApiResponse(responses.internalServerError)
   public async findAll(): Promise<OrderEntity[]> {
     return this.orderService.findAll();

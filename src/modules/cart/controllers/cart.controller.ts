@@ -26,6 +26,7 @@ export class CartController {
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.findAll)
   @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
   @ApiResponse(responses.internalServerError)
   public findAll(): Promise<CartEntity[]> {
     return this.cartService.findAll();

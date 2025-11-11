@@ -67,6 +67,7 @@ export class ProductController {
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.create)
   @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
   @ApiResponse(responses.internalServerError)
   public async create(
     @Body() dto: CreateProductDto,
@@ -78,6 +79,7 @@ export class ProductController {
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.update)
   @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
   @ApiResponse(responses.internalServerError)
   public async update(
     @Param() { uuid }: UuidDto,
@@ -90,6 +92,7 @@ export class ProductController {
   @Roles(UserRoles.ADMIN)
   @ApiOperation(properties.delete)
   @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
   @ApiResponse(responses.internalServerError)
   public async delete(@Param() { uuid }: UuidDto): Promise<DefaultResponseDto> {
     return this.productService.delete(uuid);

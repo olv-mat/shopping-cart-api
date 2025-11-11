@@ -108,4 +108,15 @@ export const endpointResponses = {
       },
     },
   },
+  forbidden: {
+    status: 403,
+    description: 'Forbidden',
+    schema: {
+      example: {
+        message: 'Access denied',
+        error: 'Forbidden',
+        statusCode: 403,
+      },
+    },
+  },
 };
