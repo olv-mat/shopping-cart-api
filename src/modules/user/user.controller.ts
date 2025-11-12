@@ -47,6 +47,7 @@ export class UserController {
   @ApiOperation(properties.findOne)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbiddenAction)
+  @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async findOne(
     @User() user: UserInterface,
@@ -60,6 +61,7 @@ export class UserController {
   @ApiOperation(properties.update)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbiddenAction)
+  @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async update(
     @User() user: UserInterface,
@@ -74,6 +76,7 @@ export class UserController {
   @ApiOperation(properties.delete)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbiddenAction)
+  @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async delete(
     @User() user: UserInterface,

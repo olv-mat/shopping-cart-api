@@ -58,6 +58,7 @@ export class ProductController {
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.findOne)
   @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async findOne(@Param() { uuid }: UuidDto): Promise<ProductEntity> {
     return this.productService.findOne(uuid);
@@ -68,6 +69,7 @@ export class ProductController {
   @ApiOperation(properties.create)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async create(
     @Body() dto: CreateProductDto,
@@ -80,6 +82,7 @@ export class ProductController {
   @ApiOperation(properties.update)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async update(
     @Param() { uuid }: UuidDto,
@@ -93,6 +96,7 @@ export class ProductController {
   @ApiOperation(properties.delete)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async delete(@Param() { uuid }: UuidDto): Promise<DefaultResponseDto> {
     return this.productService.delete(uuid);

@@ -47,6 +47,7 @@ export class OrderController {
   @ApiOperation(properties.findOne)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbiddenAction)
+  @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async findOne(
     @User() user: UserInterface,
@@ -60,6 +61,7 @@ export class OrderController {
   @ApiOperation(properties.create)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbiddenAction)
+  @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async create(
     @User() user: UserInterface,
@@ -73,6 +75,7 @@ export class OrderController {
   @ApiOperation(properties.pay)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbiddenAction)
+  @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async pay(
     @User() user: UserInterface,
@@ -86,6 +89,7 @@ export class OrderController {
   @ApiOperation(properties.delete)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbiddenAction)
+  @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async delete(
     @User() user: UserInterface,

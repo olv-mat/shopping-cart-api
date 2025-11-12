@@ -121,13 +121,23 @@ export const endpointResponses = {
   },
   forbiddenAction: {
     status: 403,
-    description:
-      'Forbidden - You do not have permission to perform this action',
+    description: 'Forbidden',
     schema: {
       example: {
         message: 'You do not have permission to perform this action',
         error: 'Forbidden',
         statusCode: 403,
+      },
+    },
+  },
+  notFound: {
+    status: 404,
+    description: 'Not Found',
+    schema: {
+      example: {
+        message: 'Resource not found',
+        error: 'Not Found',
+        statusCode: 404,
       },
     },
   },

@@ -45,6 +45,7 @@ export class CategoryController {
   @ApiOperation(properties.findOne)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async findOne(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
@@ -65,6 +66,7 @@ export class CategoryController {
   @ApiOperation(properties.update)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async update(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
@@ -77,6 +79,7 @@ export class CategoryController {
   @ApiOperation(properties.delete)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async delete(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
