@@ -36,6 +36,7 @@ export class CartController {
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.findOne)
   @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbiddenAction)
   @ApiResponse(responses.internalServerError)
   public async findOne(
     @User() user: UserInterface,

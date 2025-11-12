@@ -46,6 +46,7 @@ export class UserController {
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.findOne)
   @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbiddenAction)
   @ApiResponse(responses.internalServerError)
   public async findOne(
     @User() user: UserInterface,
@@ -58,6 +59,7 @@ export class UserController {
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.update)
   @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbiddenAction)
   @ApiResponse(responses.internalServerError)
   public async update(
     @User() user: UserInterface,
@@ -71,6 +73,7 @@ export class UserController {
   @Roles(...Object.values(UserRoles))
   @ApiOperation(properties.delete)
   @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbiddenAction)
   @ApiResponse(responses.internalServerError)
   public async delete(
     @User() user: UserInterface,
