@@ -163,4 +163,15 @@ export const endpointResponses = {
       },
     },
   },
+  cartNotAvailable: {
+    status: 400,
+    description: 'Bad Request',
+    schema: {
+      example: {
+        message: 'Cart is not available for modifications',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  },
 };
