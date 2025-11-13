@@ -23,6 +23,7 @@ export class AuthController {
 
   @Post('register')
   @ApiOperation(properties.register)
+  @ApiResponse(responses.conflict)
   @ApiResponse(responses.internalServerError)
   public async register(
     @Body() dto: RegisterDto,
@@ -36,6 +37,7 @@ export class AuthController {
   @ApiOperation(properties.registerAdmin)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.conflict)
   @ApiResponse(responses.internalServerError)
   public async registerAdmin(@Body() dto: RegisterDto) {
     return this.authService.register(dto, true);

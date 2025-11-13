@@ -141,4 +141,15 @@ export const endpointResponses = {
       },
     },
   },
+  conflict: {
+    status: 409,
+    description: 'Conflict',
+    schema: {
+      example: {
+        message: 'Resource already exists',
+        error: 'Conflict',
+        statusCode: 409,
+      },
+    },
+  },
 };

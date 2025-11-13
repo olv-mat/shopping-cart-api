@@ -70,6 +70,7 @@ export class ProductController {
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbidden)
   @ApiResponse(responses.notFound)
+  @ApiResponse(responses.conflict)
   @ApiResponse(responses.internalServerError)
   public async create(
     @Body() dto: CreateProductDto,

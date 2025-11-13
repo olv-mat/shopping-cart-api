@@ -57,6 +57,7 @@ export class CategoryController {
   @ApiOperation(properties.create)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.conflict)
   @ApiResponse(responses.internalServerError)
   public async create(@Body() dto: CategoryDto): Promise<DefaultResponseDto> {
     return this.categoryService.create(dto);
