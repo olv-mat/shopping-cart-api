@@ -152,4 +152,15 @@ export const endpointResponses = {
       },
     },
   },
+  invalidPassword: {
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      example: {
+        message: 'Invalid password',
+        error: 'Unauthorized',
+        statusCode: 401,
+      },
+    },
+  },
 };

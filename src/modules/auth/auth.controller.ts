@@ -45,6 +45,7 @@ export class AuthController {
 
   @Post('login')
   @ApiOperation(properties.login)
+  @ApiResponse(responses.invalidPassword)
   @ApiResponse(responses.notFound)
   @ApiResponse(responses.internalServerError)
   public async login(@Body() dto: LoginDto): Promise<LoginResponseDto> {
