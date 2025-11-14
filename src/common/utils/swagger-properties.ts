@@ -88,90 +88,28 @@ export const endpointProperties = {
 };
 
 export const endpointResponses = {
-  internalServerError: {
-    status: 500,
-    description: 'Internal Server Error',
-    schema: {
-      example: {
-        message: 'Internal Server Error',
-        statusCode: 500,
-      },
-    },
+  badRequest: {
+    status: 400,
+    description: 'Bad Request',
   },
   unauthorized: {
     status: 401,
     description: 'Unauthorized',
-    schema: {
-      example: {
-        message: 'Unauthorized',
-        statusCode: 401,
-      },
-    },
   },
   forbidden: {
     status: 403,
     description: 'Forbidden',
-    schema: {
-      example: {
-        message: 'Access denied',
-        error: 'Forbidden',
-        statusCode: 403,
-      },
-    },
-  },
-  forbiddenAction: {
-    status: 403,
-    description: 'Forbidden',
-    schema: {
-      example: {
-        message: 'You do not have permission to perform this action',
-        error: 'Forbidden',
-        statusCode: 403,
-      },
-    },
   },
   notFound: {
     status: 404,
     description: 'Not Found',
-    schema: {
-      example: {
-        message: 'Resource not found',
-        error: 'Not Found',
-        statusCode: 404,
-      },
-    },
   },
   conflict: {
     status: 409,
     description: 'Conflict',
-    schema: {
-      example: {
-        message: 'Resource already exists',
-        error: 'Conflict',
-        statusCode: 409,
-      },
-    },
   },
-  invalidPassword: {
-    status: 401,
-    description: 'Unauthorized',
-    schema: {
-      example: {
-        message: 'Invalid password',
-        error: 'Unauthorized',
-        statusCode: 401,
-      },
-    },
-  },
-  cartNotAvailable: {
-    status: 400,
-    description: 'Bad Request',
-    schema: {
-      example: {
-        message: 'Cart is not available for modifications',
-        error: 'Bad Request',
-        statusCode: 400,
-      },
-    },
+  internalServerError: {
+    status: 500,
+    description: 'Internal Server Error',
   },
 };
