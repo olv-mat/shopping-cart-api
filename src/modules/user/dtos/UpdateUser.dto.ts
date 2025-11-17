@@ -1,4 +1,3 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
@@ -8,10 +7,14 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { dtoProperties } from 'src/common/utils/swagger-properties';
+import {
+  EmailProperty,
+  NameProperty,
+  PasswordProperty,
+} from 'src/common/swagger/properties.swagger';
 
 export class UpdateUserDto {
-  @ApiPropertyOptional(dtoProperties.name)
+  @NameProperty()
   @IsOptional()
   @IsNotEmpty()
   @IsString()
@@ -19,7 +22,7 @@ export class UpdateUserDto {
   @Matches(/\S/, { message: 'name cannot contain only spaces' })
   name?: string;
 
-  @ApiPropertyOptional(dtoProperties.email)
+  @EmailProperty()
   @IsOptional()
   @IsNotEmpty()
   @IsEmail()
@@ -27,7 +30,7 @@ export class UpdateUserDto {
   @Matches(/\S/, { message: 'email cannot contain only spaces' })
   email?: string;
 
-  @ApiPropertyOptional(dtoProperties.password)
+  @PasswordProperty()
   @IsOptional()
   @IsNotEmpty()
   @IsString()

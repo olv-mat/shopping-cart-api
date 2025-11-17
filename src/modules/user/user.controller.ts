@@ -8,24 +8,23 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation } from '@nestjs/swagger';
 import { User } from 'src/common/decorators/user.decorator';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
 import { UuidDto } from 'src/common/dtos/Uuid.dto';
 import { UserInterface } from 'src/common/interfaces/user.interface';
 import {
-  endpointProperties,
-  endpointResponses,
-} from 'src/common/utils/swagger-properties';
+  SwaggerForbidden,
+  SwaggerInternalServerError,
+  SwaggerNotFound,
+  SwaggerUnauthorized,
+} from 'src/common/swagger/responses.swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserRoles } from './enums/user-roles.enum';
 import { UserService } from './user.service';
-
-const properties = endpointProperties.user;
-const responses = endpointResponses;
 
 @Controller('users')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -34,21 +33,21 @@ export class UserController {
 
   @Get()
   @Roles(UserRoles.ADMIN)
-  @ApiOperation(properties.findAll)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Retrieve all users' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerInternalServerError()
   public async findAll(): Promise<UserEntity[]> {
     return this.userService.findAll();
   }
 
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation(properties.findOne)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Retrieve a specific user' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async findOne(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -58,11 +57,11 @@ export class UserController {
 
   @Patch(':uuid')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation(properties.update)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Update a specific user' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async update(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -73,11 +72,11 @@ export class UserController {
 
   @Delete(':uuid')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation(properties.delete)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Delete a specific user' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async delete(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,

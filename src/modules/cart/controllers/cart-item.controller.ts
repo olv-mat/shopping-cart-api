@@ -1,22 +1,22 @@
 import { Body, Controller, Param, Patch, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/common/decorators/user.decorator';
 import { MessageResponseDto } from 'src/common/dtos/MessageResponse.dto';
 import { UuidDto } from 'src/common/dtos/Uuid.dto';
 import { UserInterface } from 'src/common/interfaces/user.interface';
+import {
+  SwaggerBadRequest,
+  SwaggerForbidden,
+  SwaggerInternalServerError,
+  SwaggerNotFound,
+  SwaggerUnauthorized,
+} from 'src/common/swagger/responses.swagger';
 import { Roles } from 'src/modules/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 import { UserRoles } from 'src/modules/user/enums/user-roles.enum';
 import { UpdateCartItemDto } from '../dtos/UpdateCartItem.dto';
 import { CartItemService } from '../services/cart-item.service';
-import {
-  endpointProperties,
-  endpointResponses,
-} from 'src/common/utils/swagger-properties';
-
-const properties = endpointProperties.cartItem;
-const responses = endpointResponses;
 
 @ApiTags('Cart Item')
 @Controller('carts/:uuid/items')
@@ -26,12 +26,12 @@ export class CartItemController {
 
   @Patch('increase')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation(properties.increase)
-  @ApiResponse(responses.badRequest)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Increase quantity of a cart item' })
+  @SwaggerBadRequest()
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async increase(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -42,12 +42,12 @@ export class CartItemController {
 
   @Patch('decrease')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation(properties.decrease)
-  @ApiResponse(responses.badRequest)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Decrease quantity of a cart item' })
+  @SwaggerBadRequest()
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async decrease(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,

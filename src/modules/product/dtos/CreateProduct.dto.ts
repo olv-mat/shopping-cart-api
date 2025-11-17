@@ -1,22 +1,25 @@
 import { IsNotEmpty, IsString, Matches, MaxLength } from 'class-validator';
+import {
+  CategoryIdProperty,
+  PriceProperty,
+  ProductNameProperty,
+} from 'src/common/swagger/properties.swagger';
 import { CategoryExists } from '../validators/category-exists.decorator';
-import { ApiProperty } from '@nestjs/swagger';
-import { dtoProperties } from 'src/common/utils/swagger-properties';
 
 export class CreateProductDto {
-  @ApiProperty(dtoProperties.productName)
+  @ProductNameProperty()
   @IsNotEmpty()
   @IsString()
   @MaxLength(255)
   @Matches(/\S/, { message: 'product cannot contain only spaces' })
   product: string;
 
-  @ApiProperty(dtoProperties.categoryId)
+  @CategoryIdProperty()
   @IsNotEmpty()
   @CategoryExists({ message: 'this category does not exist' })
   category: string;
 
-  @ApiProperty(dtoProperties.price)
+  @PriceProperty()
   @IsNotEmpty()
   @IsString()
   @Matches(/\S/, { message: 'price cannot contain only spaces' })

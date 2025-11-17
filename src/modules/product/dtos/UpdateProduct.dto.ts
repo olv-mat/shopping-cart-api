@@ -5,12 +5,15 @@ import {
   Matches,
   MaxLength,
 } from 'class-validator';
+import {
+  CategoryIdProperty,
+  PriceProperty,
+  ProductNameProperty,
+} from 'src/common/swagger/properties.swagger';
 import { CategoryExists } from '../validators/category-exists.decorator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { dtoProperties } from 'src/common/utils/swagger-properties';
 
 export class UpdateProductDto {
-  @ApiPropertyOptional(dtoProperties.name)
+  @ProductNameProperty()
   @IsOptional()
   @IsNotEmpty()
   @IsString()
@@ -18,13 +21,13 @@ export class UpdateProductDto {
   @Matches(/\S/, { message: 'product cannot contain only spaces' })
   product?: string;
 
-  @ApiPropertyOptional(dtoProperties.categoryId)
+  @CategoryIdProperty()
   @IsOptional()
   @IsNotEmpty()
   @CategoryExists({ message: 'this category does not exist' })
   category?: string;
 
-  @ApiPropertyOptional(dtoProperties.price)
+  @PriceProperty()
   @IsOptional()
   @IsNotEmpty()
   @IsString()

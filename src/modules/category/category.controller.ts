@@ -9,22 +9,22 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation } from '@nestjs/swagger';
+import {
+  SwaggerConflict,
+  SwaggerForbidden,
+  SwaggerInternalServerError,
+  SwaggerNotFound,
+  SwaggerUnauthorized,
+} from 'src/common/swagger/responses.swagger';
 import { DefaultResponseDto } from '../../common/dtos/DefaultResponse.dto';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { UserRoles } from '../user/enums/user-roles.enum';
 import { CategoryService } from './category.service';
 import { CategoryDto } from './dtos/Category.dto';
 import { CategoryEntity } from './entities/category.entity';
-import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { UserRoles } from '../user/enums/user-roles.enum';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import {
-  endpointProperties,
-  endpointResponses,
-} from 'src/common/utils/swagger-properties';
-
-const properties = endpointProperties.category;
-const responses = endpointResponses;
 
 @Controller('categories')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -33,20 +33,20 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
-  @ApiOperation(properties.findAll)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Retrieve all categories' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerInternalServerError()
   public async findAll(): Promise<CategoryEntity[]> {
     return this.categoryService.findAll();
   }
 
   @Get(':uuid')
-  @ApiOperation(properties.findOne)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Retrieve a specific category' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async findOne(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
   ): Promise<CategoryEntity> {
@@ -54,21 +54,21 @@ export class CategoryController {
   }
 
   @Post()
-  @ApiOperation(properties.create)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.conflict)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Create a new category' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerConflict()
+  @SwaggerInternalServerError()
   public async create(@Body() dto: CategoryDto): Promise<DefaultResponseDto> {
     return this.categoryService.create(dto);
   }
 
   @Put(':uuid')
-  @ApiOperation(properties.update)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Update a specific category' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async update(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
     @Body() dto: CategoryDto,
@@ -77,11 +77,11 @@ export class CategoryController {
   }
 
   @Delete(':uuid')
-  @ApiOperation(properties.delete)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Delete a specific category' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async delete(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
   ): Promise<DefaultResponseDto> {

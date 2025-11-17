@@ -8,24 +8,23 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation } from '@nestjs/swagger';
 import { User } from 'src/common/decorators/user.decorator';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
 import { UuidDto } from 'src/common/dtos/Uuid.dto';
 import { UserInterface } from 'src/common/interfaces/user.interface';
+import {
+  SwaggerForbidden,
+  SwaggerInternalServerError,
+  SwaggerNotFound,
+  SwaggerUnauthorized,
+} from 'src/common/swagger/responses.swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { UserRoles } from '../user/enums/user-roles.enum';
 import { CreateOrderDto } from './dtos/CreateOrder.dto';
 import { OrderEntity } from './entities/order.entity';
 import { OrderService } from './order.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import {
-  endpointProperties,
-  endpointResponses,
-} from 'src/common/utils/swagger-properties';
-
-const properties = endpointProperties.oder;
-const responses = endpointResponses;
 
 @Controller('orders')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -34,21 +33,21 @@ export class OrderController {
 
   @Get()
   @Roles(UserRoles.ADMIN)
-  @ApiOperation(properties.findAll)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Retrieve all orders' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerInternalServerError()
   public async findAll(): Promise<OrderEntity[]> {
     return this.orderService.findAll();
   }
 
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation(properties.findOne)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Retrieve a specific order' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async findOne(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -58,11 +57,11 @@ export class OrderController {
 
   @Post()
   @Roles(...Object.values(UserRoles))
-  @ApiOperation(properties.create)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Create a new order' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async create(
     @User() user: UserInterface,
     @Body() dto: CreateOrderDto,
@@ -72,11 +71,11 @@ export class OrderController {
 
   @Post(':uuid/pay')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation(properties.pay)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Mark a specific order as paid' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async pay(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
@@ -86,11 +85,11 @@ export class OrderController {
 
   @Delete(':uuid')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation(properties.delete)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Delete a specific order' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async delete(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,

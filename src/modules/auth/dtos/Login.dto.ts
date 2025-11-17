@@ -1,15 +1,17 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator';
-import { dtoProperties } from 'src/common/utils/swagger-properties';
+import {
+  EmailProperty,
+  PasswordProperty,
+} from 'src/common/swagger/properties.swagger';
 
 export class LoginDto {
-  @ApiProperty(dtoProperties.email)
+  @EmailProperty()
   @IsNotEmpty()
   @IsEmail()
   @Matches(/\S/, { message: 'email cannot contain only spaces' })
   email: string;
 
-  @ApiProperty(dtoProperties.password)
+  @PasswordProperty()
   @IsNotEmpty()
   @IsString()
   @Matches(/\S/, { message: 'password cannot contain only spaces' })

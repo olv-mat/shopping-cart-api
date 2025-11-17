@@ -1,9 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsUUID } from 'class-validator';
-import { dtoProperties } from 'src/common/utils/swagger-properties';
+import { CartIdProperty } from 'src/common/swagger/properties.swagger';
 
 export class CreateOrderDto {
-  @ApiProperty(dtoProperties.cartId)
+  @CartIdProperty()
   @IsUUID()
   cart: string;
 }

@@ -1,11 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, Matches, MaxLength } from 'class-validator';
-import { dtoProperties } from 'src/common/utils/swagger-properties';
+import { CategoryNameProperty } from 'src/common/swagger/properties.swagger';
 
 // npm install class-validator class-transformer
 
 export class CategoryDto {
-  @ApiProperty(dtoProperties.categoryName)
+  @CategoryNameProperty()
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)

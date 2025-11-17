@@ -1,21 +1,20 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation } from '@nestjs/swagger';
 import { User } from 'src/common/decorators/user.decorator';
 import { UuidDto } from 'src/common/dtos/Uuid.dto';
 import { UserInterface } from 'src/common/interfaces/user.interface';
+import {
+  SwaggerForbidden,
+  SwaggerInternalServerError,
+  SwaggerNotFound,
+  SwaggerUnauthorized,
+} from 'src/common/swagger/responses.swagger';
 import { Roles } from 'src/modules/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 import { UserRoles } from 'src/modules/user/enums/user-roles.enum';
 import { CartEntity } from '../entities/cart.entity';
 import { CartService } from '../services/cart.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import {
-  endpointProperties,
-  endpointResponses,
-} from 'src/common/utils/swagger-properties';
-
-const properties = endpointProperties.cart;
-const responses = endpointResponses;
 
 @Controller('carts')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -24,21 +23,21 @@ export class CartController {
 
   @Get()
   @Roles(UserRoles.ADMIN)
-  @ApiOperation(properties.findAll)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Retrieve all carts' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerInternalServerError()
   public findAll(): Promise<CartEntity[]> {
     return this.cartService.findAll();
   }
 
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation(properties.findOne)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Retrieve a specific cart' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async findOne(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,

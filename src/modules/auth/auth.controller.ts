@@ -1,10 +1,13 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation } from '@nestjs/swagger';
 import {
-  endpointProperties,
-  endpointResponses,
-} from 'src/common/utils/swagger-properties';
+  SwaggerConflict,
+  SwaggerForbidden,
+  SwaggerInternalServerError,
+  SwaggerNotFound,
+  SwaggerUnauthorized,
+} from 'src/common/swagger/responses.swagger';
 import { UserRoles } from '../user/enums/user-roles.enum';
 import { AuthService } from './auth.service';
 import { Roles } from './decorators/roles.decorator';
@@ -14,17 +17,14 @@ import { RegisterDto } from './dtos/Register.dto';
 import { RegisterResponseDto } from './dtos/RegisterResponse.dto';
 import { RolesGuard } from './guards/roles.guard';
 
-const properties = endpointProperties.auth;
-const responses = endpointResponses;
-
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  @ApiOperation(properties.register)
-  @ApiResponse(responses.conflict)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Register a new user' })
+  @SwaggerConflict()
+  @SwaggerInternalServerError()
   public async register(
     @Body() dto: RegisterDto,
   ): Promise<RegisterResponseDto> {
@@ -34,20 +34,22 @@ export class AuthController {
   @Post('register/admin')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(UserRoles.ADMIN)
-  @ApiOperation(properties.registerAdmin)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.conflict)
-  @ApiResponse(responses.internalServerError)
-  public async registerAdmin(@Body() dto: RegisterDto) {
+  @ApiOperation({ summary: 'Register a new admin user' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerConflict()
+  @SwaggerInternalServerError()
+  public async registerAdmin(
+    @Body() dto: RegisterDto,
+  ): Promise<RegisterResponseDto> {
     return this.authService.register(dto, true);
   }
 
   @Post('login')
-  @ApiOperation(properties.login)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Authenticate user' })
+  @SwaggerUnauthorized()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async login(@Body() dto: LoginDto): Promise<LoginResponseDto> {
     return this.authService.login(dto);
   }

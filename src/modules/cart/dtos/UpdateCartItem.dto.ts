@@ -1,13 +1,15 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsUUID, Min } from 'class-validator';
-import { dtoProperties } from 'src/common/utils/swagger-properties';
+import {
+  ProductIdProperty,
+  QuantityProperty,
+} from 'src/common/swagger/properties.swagger';
 
 export class UpdateCartItemDto {
-  @ApiProperty(dtoProperties.productId)
+  @ProductIdProperty()
   @IsUUID()
   product: string;
 
-  @ApiProperty(dtoProperties.quantity)
+  @QuantityProperty()
   @IsInt()
   @Min(1)
   quantity: number;

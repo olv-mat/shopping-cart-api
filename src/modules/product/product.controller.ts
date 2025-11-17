@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  InternalServerErrorException,
   Param,
   Patch,
   Post,
@@ -11,8 +10,16 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation } from '@nestjs/swagger';
 import { IPaginationMeta } from 'nestjs-typeorm-paginate';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
+import {
+  SwaggerConflict,
+  SwaggerForbidden,
+  SwaggerInternalServerError,
+  SwaggerNotFound,
+  SwaggerUnauthorized,
+} from 'src/common/swagger/responses.swagger';
 import { UuidDto } from '../../common/dtos/Uuid.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -21,16 +28,8 @@ import { CreateProductDto } from './dtos/CreateProduct.dto';
 import { UpdateProductDto } from './dtos/UpdateProduct.dto';
 import { ProductEntity } from './entities/product.entity';
 import { ProductService } from './product.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import {
-  endpointProperties,
-  endpointResponses,
-} from 'src/common/utils/swagger-properties';
 
 // npm install nestjs-typeorm-paginate
-
-const properties = endpointProperties.product;
-const responses = endpointResponses;
 
 @Controller('products')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -39,9 +38,9 @@ export class ProductController {
 
   @Get()
   @Roles(...Object.values(UserRoles))
-  @ApiOperation(properties.findAll)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Retrieve all products with optional filters' })
+  @SwaggerUnauthorized()
+  @SwaggerInternalServerError()
   public async findAll(
     @Query('category') category?: string,
     @Query('search') search?: string,
@@ -56,22 +55,22 @@ export class ProductController {
 
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation(properties.findOne)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Retrieve a specific product' })
+  @SwaggerUnauthorized()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async findOne(@Param() { uuid }: UuidDto): Promise<ProductEntity> {
     return this.productService.findOne(uuid);
   }
 
   @Post()
   @Roles(UserRoles.ADMIN)
-  @ApiOperation(properties.create)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.conflict)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Create a new product' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerConflict()
+  @SwaggerInternalServerError()
   public async create(
     @Body() dto: CreateProductDto,
   ): Promise<DefaultResponseDto> {
@@ -80,11 +79,11 @@ export class ProductController {
 
   @Patch(':uuid')
   @Roles(UserRoles.ADMIN)
-  @ApiOperation(properties.update)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Update a specific product' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async update(
     @Param() { uuid }: UuidDto,
     @Body() dto: UpdateProductDto,
@@ -94,11 +93,11 @@ export class ProductController {
 
   @Delete(':uuid')
   @Roles(UserRoles.ADMIN)
-  @ApiOperation(properties.delete)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.notFound)
-  @ApiResponse(responses.internalServerError)
+  @ApiOperation({ summary: 'Delete a specific product' })
+  @SwaggerUnauthorized()
+  @SwaggerForbidden()
+  @SwaggerNotFound()
+  @SwaggerInternalServerError()
   public async delete(@Param() { uuid }: UuidDto): Promise<DefaultResponseDto> {
     return this.productService.delete(uuid);
   }
