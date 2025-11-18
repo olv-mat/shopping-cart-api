@@ -15,6 +15,7 @@ import { IPaginationMeta } from 'nestjs-typeorm-paginate';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
 import {
   SwaggerConflict,
+  SwaggerCreated,
   SwaggerForbidden,
   SwaggerInternalServerError,
   SwaggerNotFound,
@@ -66,6 +67,7 @@ export class ProductController {
   @Post()
   @Roles(UserRoles.ADMIN)
   @ApiOperation({ summary: 'Create a new product' })
+  @SwaggerCreated()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()

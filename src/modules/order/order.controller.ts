@@ -14,6 +14,7 @@ import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
 import { UuidDto } from 'src/common/dtos/Uuid.dto';
 import { UserInterface } from 'src/common/interfaces/user.interface';
 import {
+  SwaggerCreated,
   SwaggerForbidden,
   SwaggerInternalServerError,
   SwaggerNotFound,
@@ -58,6 +59,7 @@ export class OrderController {
   @Post()
   @Roles(...Object.values(UserRoles))
   @ApiOperation({ summary: 'Create a new order' })
+  @SwaggerCreated()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()

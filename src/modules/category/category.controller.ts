@@ -13,6 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation } from '@nestjs/swagger';
 import {
   SwaggerConflict,
+  SwaggerCreated,
   SwaggerForbidden,
   SwaggerInternalServerError,
   SwaggerNotFound,
@@ -55,6 +56,7 @@ export class CategoryController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new category' })
+  @SwaggerCreated()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerConflict()
