@@ -3,6 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation } from '@nestjs/swagger';
 import {
   SwaggerConflict,
+  SwaggerCreated,
   SwaggerForbidden,
   SwaggerInternalServerError,
   SwaggerNotFound,
@@ -23,6 +24,7 @@ export class AuthController {
 
   @Post('register')
   @ApiOperation({ summary: 'Register a new user' })
+  @SwaggerCreated()
   @SwaggerConflict()
   @SwaggerInternalServerError()
   public async register(
@@ -35,6 +37,7 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(UserRoles.ADMIN)
   @ApiOperation({ summary: 'Register a new admin user' })
+  @SwaggerCreated()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerConflict()
@@ -47,6 +50,7 @@ export class AuthController {
 
   @Post('login')
   @ApiOperation({ summary: 'Authenticate user' })
+  @SwaggerCreated()
   @SwaggerUnauthorized()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
