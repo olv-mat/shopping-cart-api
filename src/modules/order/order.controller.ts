@@ -18,6 +18,7 @@ import {
   SwaggerForbidden,
   SwaggerInternalServerError,
   SwaggerNotFound,
+  SwaggerOk,
   SwaggerUnauthorized,
 } from 'src/common/swagger/responses.swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -36,6 +37,7 @@ export class OrderController {
   @Get()
   @Roles(UserRoles.ADMIN)
   @ApiOperation({ summary: 'Retrieve all orders' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerInternalServerError()
@@ -46,6 +48,7 @@ export class OrderController {
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation({ summary: 'Retrieve a specific order' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()
@@ -75,6 +78,7 @@ export class OrderController {
   @Post(':uuid/pay')
   @Roles(...Object.values(UserRoles))
   @ApiOperation({ summary: 'Mark a specific order as paid' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()
@@ -89,6 +93,7 @@ export class OrderController {
   @Delete(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation({ summary: 'Delete a specific order' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()

@@ -5,19 +5,12 @@ import {
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
-export const SwaggerCreated = () =>
-  ApiCreatedResponse({
-    description: 'Created',
-    schema: {
-      example: {
-        message: 'Created',
-        statusCode: 201,
-      },
-    },
-  });
+export const SwaggerOk = () => ApiOkResponse();
+export const SwaggerCreated = () => ApiCreatedResponse();
 
 export const SwaggerBadRequest = () =>
   ApiBadRequestResponse({

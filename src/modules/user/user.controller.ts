@@ -17,6 +17,7 @@ import {
   SwaggerForbidden,
   SwaggerInternalServerError,
   SwaggerNotFound,
+  SwaggerOk,
   SwaggerUnauthorized,
 } from 'src/common/swagger/responses.swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -35,6 +36,7 @@ export class UserController {
   @Get()
   @Roles(UserRoles.ADMIN)
   @ApiOperation({ summary: 'Retrieve all users' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerInternalServerError()
@@ -45,6 +47,7 @@ export class UserController {
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation({ summary: 'Retrieve a specific user' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()
@@ -59,6 +62,7 @@ export class UserController {
   @Patch(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation({ summary: 'Update a specific user' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()
@@ -74,6 +78,7 @@ export class UserController {
   @Delete(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation({ summary: 'Delete a specific user' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()

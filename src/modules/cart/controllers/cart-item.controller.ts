@@ -10,6 +10,7 @@ import {
   SwaggerForbidden,
   SwaggerInternalServerError,
   SwaggerNotFound,
+  SwaggerOk,
   SwaggerUnauthorized,
 } from 'src/common/swagger/responses.swagger';
 import { Roles } from 'src/modules/auth/decorators/roles.decorator';
@@ -28,6 +29,7 @@ export class CartItemController {
   @Patch('increase')
   @Roles(...Object.values(UserRoles))
   @ApiOperation({ summary: 'Increase quantity of a cart item' })
+  @SwaggerOk()
   @SwaggerBadRequest()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
@@ -44,6 +46,7 @@ export class CartItemController {
   @Patch('decrease')
   @Roles(...Object.values(UserRoles))
   @ApiOperation({ summary: 'Decrease quantity of a cart item' })
+  @SwaggerOk()
   @SwaggerBadRequest()
   @SwaggerUnauthorized()
   @SwaggerForbidden()

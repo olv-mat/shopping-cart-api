@@ -8,6 +8,7 @@ import {
   SwaggerForbidden,
   SwaggerInternalServerError,
   SwaggerNotFound,
+  SwaggerOk,
   SwaggerUnauthorized,
 } from 'src/common/swagger/responses.swagger';
 import { Roles } from 'src/modules/auth/decorators/roles.decorator';
@@ -25,6 +26,7 @@ export class CartController {
   @Get()
   @Roles(UserRoles.ADMIN)
   @ApiOperation({ summary: 'Retrieve all carts' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerInternalServerError()
@@ -35,6 +37,7 @@ export class CartController {
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation({ summary: 'Retrieve a specific cart' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()

@@ -11,7 +11,7 @@ export function swaggerSetup(app: INestApplication): void {
   const config = new DocumentBuilder()
     .setTitle('Shopping Cart API')
     .setDescription(
-      'A NestJS-based API designed to manage a complete shopping cart system. It includes modules for users, categories, products, orders, and carts, featuring JWT authentication and custom role handling',
+      'A NestJS-based API designed to manage a complete shopping cart system. It includes modules for users, categories, products, orders, and carts, featuring JWT authentication and custom role handling.',
     )
     .addBearerAuth()
     .build();

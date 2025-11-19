@@ -19,6 +19,7 @@ import {
   SwaggerForbidden,
   SwaggerInternalServerError,
   SwaggerNotFound,
+  SwaggerOk,
   SwaggerUnauthorized,
 } from 'src/common/swagger/responses.swagger';
 import { UuidDto } from '../../common/dtos/Uuid.dto';
@@ -45,6 +46,7 @@ export class ProductController {
   @ApiQuery({ name: 'search', required: false })
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'limit', required: false })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerInternalServerError()
   public async findAll(
@@ -62,6 +64,7 @@ export class ProductController {
   @Get(':uuid')
   @Roles(...Object.values(UserRoles))
   @ApiOperation({ summary: 'Retrieve a specific product' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
@@ -87,6 +90,7 @@ export class ProductController {
   @Patch(':uuid')
   @Roles(UserRoles.ADMIN)
   @ApiOperation({ summary: 'Update a specific product' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()
@@ -101,6 +105,7 @@ export class ProductController {
   @Delete(':uuid')
   @Roles(UserRoles.ADMIN)
   @ApiOperation({ summary: 'Delete a specific product' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()

@@ -17,6 +17,7 @@ import {
   SwaggerForbidden,
   SwaggerInternalServerError,
   SwaggerNotFound,
+  SwaggerOk,
   SwaggerUnauthorized,
 } from 'src/common/swagger/responses.swagger';
 import { DefaultResponseDto } from '../../common/dtos/DefaultResponse.dto';
@@ -36,6 +37,7 @@ export class CategoryController {
 
   @Get()
   @ApiOperation({ summary: 'Retrieve all categories' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerInternalServerError()
@@ -45,6 +47,7 @@ export class CategoryController {
 
   @Get(':uuid')
   @ApiOperation({ summary: 'Retrieve a specific category' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()
@@ -68,6 +71,7 @@ export class CategoryController {
 
   @Put(':uuid')
   @ApiOperation({ summary: 'Update a specific category' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()
@@ -81,6 +85,7 @@ export class CategoryController {
 
   @Delete(':uuid')
   @ApiOperation({ summary: 'Delete a specific category' })
+  @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()
