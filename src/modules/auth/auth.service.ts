@@ -8,15 +8,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { UserInterface } from 'src/common/interfaces/user.interface';
 import { Repository } from 'typeorm';
-import { CartEntity } from '../cart/entities/cart.entity';
-import { CartService } from '../cart/services/cart.service';
 import { UserEntity } from '../user/entities/user.entity';
 import { UserRoles } from '../user/enums/user-roles.enum';
 import { LoginDto } from './dtos/Login.dto';
-import { LoginResponseDto } from './dtos/LoginResponse.dto';
 import { RegisterDto } from './dtos/Register.dto';
-import { RegisterResponseDto } from './dtos/RegisterResponse.dto';
-import { AuthResponseMapper } from './mappers/auth-response.mapper';
 
 /* 
   npm install bcrypt
@@ -28,51 +23,39 @@ export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    private jwtService: JwtService,
-    private readonly authResponseMapper: AuthResponseMapper,
-    private readonly cartService: CartService,
+    private readonly jwtService: JwtService,
   ) {}
 
   public async register(
     dto: RegisterDto,
     admin: boolean,
-  ): Promise<RegisterResponseDto> {
+  ): Promise<{ user: UserEntity; token: string }> {
     await this.checkUserExists(dto.email);
-    const hashedPassword = await bcrypt.hash(dto.password, 10);
+    const passwordHash = await bcrypt.hash(dto.password, 10);
     const user = await this.userRepository.save({
       ...dto,
-      password: hashedPassword,
+      password: passwordHash,
       ...(admin && { role: UserRoles.ADMIN }),
     });
-    const cart = admin ? null : await this.cartService.createCart(user);
     const token = this.generateToken(user);
-
-    return this.authResponseMapper.toRegisterResponse(
-      token,
-      user.id,
-      cart?.id ?? null,
-      'User created successfully',
-    );
+    return { user, token };
   }
 
-  public async login(dto: LoginDto): Promise<LoginResponseDto> {
+  public async login(
+    dto: LoginDto,
+  ): Promise<{ user: UserEntity; token: string }> {
     const user = await this.findUserByEmail(dto.email);
-    const isPasswordValid = await bcrypt.compare(dto.password, user.password);
+    const validPassword = await bcrypt.compare(dto.password, user.password);
 
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid password');
-    }
+    if (!validPassword) throw new UnauthorizedException('Invalid password');
 
     const token = this.generateToken(user);
-    let cart: CartEntity | null = null;
-    if (user.role === UserRoles.CUSTOMER) {
-      cart = await this.cartService.findActiveCartByUser(user);
-    }
-    return this.authResponseMapper.toLoginResponse(
-      token,
-      user.id,
-      cart?.id ?? null,
-    );
+    return { user, token };
+  }
+
+  private async checkUserExists(email: string): Promise<void> {
+    const user = await this.userRepository.findOne({ where: { email: email } });
+    if (user) throw new ConflictException('User already exists');
   }
 
   private async findUserByEmail(email: string): Promise<UserEntity> {
@@ -80,17 +63,8 @@ export class AuthService {
       where: { email: email },
       select: ['id', 'name', 'email', 'password', 'role'],
     });
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
+    if (!user) throw new UnauthorizedException('User not found');
     return user;
-  }
-
-  private async checkUserExists(email: string): Promise<void> {
-    const user = await this.userRepository.findOne({ where: { email: email } });
-    if (user) {
-      throw new ConflictException('User already exists');
-    }
   }
 
   private generateToken(user: UserEntity): string {

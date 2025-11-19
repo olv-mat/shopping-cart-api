@@ -4,11 +4,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CartModule } from '../cart/cart.module';
-import { CartEntity } from '../cart/entities/cart.entity';
 import { UserEntity } from '../user/entities/user.entity';
 import { AuthController } from './auth.controller';
+import { AuthFacade } from './auth.facade';
 import { AuthService } from './auth.service';
-import { AuthResponseMapper } from './mappers/auth-response.mapper';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
 /* 
@@ -27,10 +26,10 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         signOptions: { expiresIn: '1h' },
       }),
     }),
-    TypeOrmModule.forFeature([UserEntity, CartEntity]),
+    TypeOrmModule.forFeature([UserEntity]),
     CartModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, AuthResponseMapper],
+  providers: [AuthFacade, AuthService, JwtStrategy],
 })
 export class AuthModule {}
