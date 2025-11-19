@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { IPaginationMeta } from 'nestjs-typeorm-paginate';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
 import {
@@ -41,6 +41,10 @@ export class ProductController {
   @Get()
   @Roles(...Object.values(UserRoles))
   @ApiOperation({ summary: 'Retrieve all products with optional filters' })
+  @ApiQuery({ name: 'category', required: false })
+  @ApiQuery({ name: 'search', required: false })
+  @ApiQuery({ name: 'page', required: false })
+  @ApiQuery({ name: 'limit', required: false })
   @SwaggerUnauthorized()
   @SwaggerInternalServerError()
   public async findAll(
