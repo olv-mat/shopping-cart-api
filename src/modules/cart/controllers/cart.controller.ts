@@ -1,6 +1,6 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { User } from 'src/common/decorators/user.decorator';
 import { UuidDto } from 'src/common/dtos/Uuid.dto';
 import { UserInterface } from 'src/common/interfaces/user.interface';
@@ -16,6 +16,7 @@ import { UserRoles } from 'src/modules/user/enums/user-roles.enum';
 import { CartEntity } from '../entities/cart.entity';
 import { CartService } from '../services/cart.service';
 
+@ApiBearerAuth()
 @Controller('carts')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class CartController {

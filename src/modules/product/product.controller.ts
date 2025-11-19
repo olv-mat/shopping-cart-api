@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { IPaginationMeta } from 'nestjs-typeorm-paginate';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
 import {
@@ -32,6 +32,7 @@ import { ProductService } from './product.service';
 
 // npm install nestjs-typeorm-paginate
 
+@ApiBearerAuth()
 @Controller('products')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class ProductController {

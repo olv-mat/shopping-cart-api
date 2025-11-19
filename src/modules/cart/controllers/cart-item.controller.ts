@@ -1,6 +1,6 @@
 import { Body, Controller, Param, Patch, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/common/decorators/user.decorator';
 import { MessageResponseDto } from 'src/common/dtos/MessageResponse.dto';
 import { UuidDto } from 'src/common/dtos/Uuid.dto';
@@ -19,6 +19,7 @@ import { UpdateCartItemDto } from '../dtos/UpdateCartItem.dto';
 import { CartItemService } from '../services/cart-item.service';
 
 @ApiTags('Cart Item')
+@ApiBearerAuth()
 @Controller('carts/:uuid/items')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class CartItemController {

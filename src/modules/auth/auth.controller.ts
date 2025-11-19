@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import {
   SwaggerConflict,
   SwaggerCreated,
@@ -36,6 +36,7 @@ export class AuthController {
   @Post('register/admin')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(UserRoles.ADMIN)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Register a new admin user' })
   @SwaggerCreated()
   @SwaggerUnauthorized()

@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import {
   SwaggerConflict,
   SwaggerCreated,
@@ -27,6 +27,7 @@ import { CategoryService } from './category.service';
 import { CategoryDto } from './dtos/Category.dto';
 import { CategoryEntity } from './entities/category.entity';
 
+@ApiBearerAuth()
 @Controller('categories')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Roles(UserRoles.ADMIN)
