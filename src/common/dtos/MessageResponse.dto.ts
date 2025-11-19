@@ -1,3 +1,6 @@
 export class MessageResponseDto {
-  constructor(public message: string) {}
+  readonly message: string;
+  constructor(message: string) {
+    this.message = message;
+  }
 }

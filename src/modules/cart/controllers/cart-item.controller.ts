@@ -17,14 +17,14 @@ import { Roles } from 'src/modules/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 import { UserRoles } from 'src/modules/user/enums/user-roles.enum';
 import { UpdateCartItemDto } from '../dtos/UpdateCartItem.dto';
-import { CartItemService } from '../services/cart-item.service';
+import { CartItemFacade } from '../facades/cart-item.facade';
 
 @ApiTags('Cart Item')
 @ApiBearerAuth()
 @Controller('carts/:uuid/items')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class CartItemController {
-  constructor(private readonly cartItemService: CartItemService) {}
+  constructor(private readonly cartItemFacade: CartItemFacade) {}
 
   @Patch('increase')
   @Roles(...Object.values(UserRoles))
@@ -36,11 +36,11 @@ export class CartItemController {
   @SwaggerNotFound()
   @SwaggerInternalServerError()
   public async increase(
-    @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
+    @User() user: UserInterface,
     @Body() dto: UpdateCartItemDto,
   ): Promise<MessageResponseDto> {
-    return this.cartItemService.increase(user, uuid, dto);
+    return this.cartItemFacade.increase(uuid, user, dto);
   }
 
   @Patch('decrease')
@@ -53,10 +53,10 @@ export class CartItemController {
   @SwaggerNotFound()
   @SwaggerInternalServerError()
   public async decrease(
-    @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
+    @User() user: UserInterface,
     @Body() dto: UpdateCartItemDto,
   ): Promise<MessageResponseDto> {
-    return this.cartItemService.decrease(user, uuid, dto);
+    return this.cartItemFacade.decrease(uuid, user, dto);
   }
 }

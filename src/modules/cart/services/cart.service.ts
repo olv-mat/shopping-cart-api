@@ -1,8 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserInterface } from 'src/common/interfaces/user.interface';
-import { checkUserPermission } from 'src/common/utils/check-user-permission.util';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { UserEntity } from '../../user/entities/user.entity';
 import { CartEntity } from '../entities/cart.entity';
 import { CartStatus } from '../enums/cart-status.enum';
@@ -18,16 +20,24 @@ export class CartService {
     return await this.cartRepository.find();
   }
 
-  public async findOne(user: UserInterface, uuid: string): Promise<CartEntity> {
-    const cart = await this.findCartById(uuid);
-    checkUserPermission(user, cart.user.id);
-    return cart;
+  public async findOne(uuid: string): Promise<CartEntity> {
+    return await this.findCartById(uuid);
   }
 
   public async createCart(user: UserEntity): Promise<CartEntity> {
-    return await this.cartRepository.save({
-      user: user,
-    });
+    return await this.cartRepository.save({ user: user });
+  }
+
+  public async findCartById(uuid: string): Promise<CartEntity> {
+    const cart = await this.cartRepository.findOneBy({ id: uuid });
+    if (!cart) throw new NotFoundException('Cart not found');
+    return cart;
+  }
+
+  public checkIfAvailable(status: CartStatus): void {
+    if (status !== CartStatus.OPEN) {
+      throw new BadRequestException('Cart is not available for modifications');
+    }
   }
 
   public async changeCartStatus(
@@ -35,26 +45,5 @@ export class CartService {
     status: CartStatus,
   ): Promise<void> {
     await this.cartRepository.update(cart.id, { status: status });
-  }
-
-  public async findCartById(uuid: string): Promise<CartEntity> {
-    return this.findOneOrThrow({ id: uuid });
-  }
-
-  public async findActiveCartByUser(user: UserEntity) {
-    return this.findOneOrThrow({
-      user: { id: user.id },
-      status: CartStatus.OPEN,
-    });
-  }
-
-  private async findOneOrThrow(
-    where: FindOptionsWhere<CartEntity>,
-  ): Promise<CartEntity> {
-    const cart = await this.cartRepository.findOne({ where });
-    if (!cart) {
-      throw new NotFoundException('Cart not found');
-    }
-    return cart;
   }
 }
