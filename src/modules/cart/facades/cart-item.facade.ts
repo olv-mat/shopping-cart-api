@@ -51,7 +51,7 @@ export class CartItemFacade {
   ) {
     const cart = await this.cartService.findCartById(uuid);
     checkUserPermission(user, cart.user.id);
-    this.cartService.checkIfAvailable(cart.status);
+    this.cartService.assertCartIsAvailable(cart);
     const product = await this.productService.findProductById(dto.product);
     const quantity = dto.quantity;
     return { cart, product, quantity };

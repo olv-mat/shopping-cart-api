@@ -15,7 +15,7 @@ export class MonitoringController {
   @ApiOperation({ summary: 'Retrieve application monitoring metrics' })
   @SwaggerOk()
   @SwaggerInternalServerError()
-  public async getMetrics(): Promise<String> {
+  public getMetrics(): Promise<String> {
     return this.monitoringService.getMetrics();
   }
 }

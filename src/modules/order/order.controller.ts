@@ -26,13 +26,17 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { UserRoles } from '../user/enums/user-roles.enum';
 import { CreateOrderDto } from './dtos/CreateOrder.dto';
 import { OrderEntity } from './entities/order.entity';
+import { OrderFacade } from './order.facade';
 import { OrderService } from './order.service';
 
 @ApiBearerAuth()
 @Controller('orders')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class OrderController {
-  constructor(private readonly orderService: OrderService) {}
+  constructor(
+    private readonly orderService: OrderService,
+    private readonly orderFacade: OrderFacade,
+  ) {}
 
   @Get()
   @Roles(UserRoles.ADMIN)
@@ -41,7 +45,7 @@ export class OrderController {
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerInternalServerError()
-  public async findAll(): Promise<OrderEntity[]> {
+  public findAll(): Promise<OrderEntity[]> {
     return this.orderService.findAll();
   }
 
@@ -53,11 +57,11 @@ export class OrderController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async findOne(
-    @User() user: UserInterface,
+  public findOne(
     @Param() { uuid }: UuidDto,
+    @User() user: UserInterface,
   ): Promise<OrderEntity> {
-    return this.orderService.findOne(user, uuid);
+    return this.orderFacade.findOne(uuid, user);
   }
 
   @Post()
@@ -68,11 +72,11 @@ export class OrderController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async create(
-    @User() user: UserInterface,
+  public create(
     @Body() dto: CreateOrderDto,
+    @User() user: UserInterface,
   ): Promise<DefaultResponseDto> {
-    return this.orderService.create(user, dto);
+    return this.orderFacade.create(dto, user);
   }
 
   @Post(':uuid/pay')
@@ -83,11 +87,11 @@ export class OrderController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async pay(
-    @User() user: UserInterface,
+  public pay(
     @Param() { uuid }: UuidDto,
+    @User() user: UserInterface,
   ): Promise<DefaultResponseDto> {
-    return this.orderService.pay(user, uuid);
+    return this.orderFacade.pay(uuid, user);
   }
 
   @Delete(':uuid')
@@ -98,10 +102,10 @@ export class OrderController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async delete(
-    @User() user: UserInterface,
+  public delete(
     @Param() { uuid }: UuidDto,
+    @User() user: UserInterface,
   ): Promise<DefaultResponseDto> {
-    return this.orderService.delete(user, uuid);
+    return this.orderFacade.delete(uuid, user);
   }
 }

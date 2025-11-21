@@ -34,9 +34,15 @@ export class CartService {
     return cart;
   }
 
-  public checkIfAvailable(status: CartStatus): void {
-    if (status !== CartStatus.OPEN) {
+  public assertCartIsAvailable(cart: CartEntity): void {
+    if (cart.status !== CartStatus.OPEN) {
       throw new BadRequestException('Cart is not available for modifications');
+    }
+  }
+
+  public assertCartHasItems(cart: CartEntity): void {
+    if (cart.items.length === 0) {
+      throw new BadRequestException('Cart must contain at least one product');
     }
   }
 
