@@ -26,7 +26,10 @@ export class OrderFacade {
     return await this.orderContext(uuid, user);
   }
 
-  public async create(dto: CreateOrderDto, user: UserInterface) {
+  public async create(
+    dto: CreateOrderDto,
+    user: UserInterface,
+  ): Promise<DefaultResponseDto> {
     const cart = await this.cartContext(dto.cart, user);
     this.cartService.assertCartIsAvailable(cart);
     this.cartService.assertCartHasItems(cart);
@@ -39,11 +42,14 @@ export class OrderFacade {
     );
   }
 
-  public async pay(uuid: string, user: UserInterface) {
+  public async pay(
+    uuid: string,
+    user: UserInterface,
+  ): Promise<DefaultResponseDto> {
     const order = await this.orderContext(uuid, user);
     await this.orderService.pay(order);
     const storedUser = await this.userService.findUserById(order.cart.user.id);
-    await this.cartService.createCart(storedUser);
+    await this.cartService.create(storedUser);
     return ResponseMapper.toResponse(
       DefaultResponseDto,
       order.id,
@@ -51,9 +57,12 @@ export class OrderFacade {
     );
   }
 
-  public async delete(uuid: string, user: UserInterface) {
+  public async delete(
+    uuid: string,
+    user: UserInterface,
+  ): Promise<DefaultResponseDto> {
     const order = await this.orderContext(uuid, user);
-    const cart = await this.cartService.findCartById(order.cart.id);
+    const cart = await this.cartService.findOne(order.cart.id);
     await this.orderService.delete(order);
     await this.cartService.changeCartStatus(cart, CartStatus.OPEN);
     return ResponseMapper.toResponse(
@@ -76,7 +85,7 @@ export class OrderFacade {
     uuid: string,
     user: UserInterface,
   ): Promise<CartEntity> {
-    const cart = await this.cartService.findCartById(uuid);
+    const cart = await this.cartService.findOne(uuid);
     checkUserPermission(user, cart.user.id);
     return cart;
   }

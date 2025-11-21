@@ -49,7 +49,7 @@ export class ProductController {
   @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerInternalServerError()
-  public async findAll(
+  public findAll(
     @Query('category') category?: string,
     @Query('search') search?: string,
     @Query('page') page = 1,
@@ -68,7 +68,7 @@ export class ProductController {
   @SwaggerUnauthorized()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async findOne(@Param() { uuid }: UuidDto): Promise<ProductEntity> {
+  public findOne(@Param() { uuid }: UuidDto): Promise<ProductEntity> {
     return this.productService.findOne(uuid);
   }
 
@@ -81,9 +81,7 @@ export class ProductController {
   @SwaggerNotFound()
   @SwaggerConflict()
   @SwaggerInternalServerError()
-  public async create(
-    @Body() dto: CreateProductDto,
-  ): Promise<DefaultResponseDto> {
+  public create(@Body() dto: CreateProductDto): Promise<DefaultResponseDto> {
     return this.productService.create(dto);
   }
 
@@ -95,7 +93,7 @@ export class ProductController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async update(
+  public update(
     @Param() { uuid }: UuidDto,
     @Body() dto: UpdateProductDto,
   ): Promise<DefaultResponseDto> {
@@ -110,7 +108,7 @@ export class ProductController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async delete(@Param() { uuid }: UuidDto): Promise<DefaultResponseDto> {
+  public delete(@Param() { uuid }: UuidDto): Promise<DefaultResponseDto> {
     return this.productService.delete(uuid);
   }
 }

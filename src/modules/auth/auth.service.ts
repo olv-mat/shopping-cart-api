@@ -30,7 +30,7 @@ export class AuthService {
     dto: RegisterDto,
     admin: boolean,
   ): Promise<{ user: UserEntity; token: string }> {
-    await this.checkUserExists(dto.email);
+    await this.assertUserNotExists(dto.email);
     const passwordHash = await bcrypt.hash(dto.password, 10);
     const user = await this.userRepository.save({
       ...dto,
@@ -44,7 +44,7 @@ export class AuthService {
   public async login(
     dto: LoginDto,
   ): Promise<{ user: UserEntity; token: string }> {
-    const user = await this.findUserByEmail(dto.email);
+    const user = await this.getUserByEmail(dto.email);
     const validPassword = await bcrypt.compare(dto.password, user.password);
 
     if (!validPassword) throw new UnauthorizedException('Invalid password');
@@ -53,12 +53,12 @@ export class AuthService {
     return { user, token };
   }
 
-  private async checkUserExists(email: string): Promise<void> {
+  private async assertUserNotExists(email: string): Promise<void> {
     const user = await this.userRepository.findOne({ where: { email: email } });
     if (user) throw new ConflictException('User already exists');
   }
 
-  private async findUserByEmail(email: string): Promise<UserEntity> {
+  private async getUserByEmail(email: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({
       where: { email: email },
       select: ['id', 'name', 'email', 'password', 'role'],

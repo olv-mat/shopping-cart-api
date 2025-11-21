@@ -3,8 +3,10 @@ import { MessageResponseDto } from 'src/common/dtos/MessageResponse.dto';
 import { UserInterface } from 'src/common/interfaces/user.interface';
 import { ResponseMapper } from 'src/common/mappers/response.mapper';
 import { checkUserPermission } from 'src/common/utils/check-user-permission.util';
+import { ProductEntity } from 'src/modules/product/entities/product.entity';
 import { ProductService } from '../../product/product.service';
 import { UpdateCartItemDto } from '../dtos/UpdateCartItem.dto';
+import { CartEntity } from '../entities/cart.entity';
 import { CartItemService } from '../services/cart-item.service';
 import { CartService } from '../services/cart.service';
 
@@ -20,7 +22,7 @@ export class CartItemFacade {
     uuid: string,
     user: UserInterface,
     dto: UpdateCartItemDto,
-  ) {
+  ): Promise<MessageResponseDto> {
     const { cart, product, quantity } = await this.context(uuid, user, dto);
     const message = await this.cartItemService.increase(
       cart,
@@ -34,7 +36,7 @@ export class CartItemFacade {
     uuid: string,
     user: UserInterface,
     dto: UpdateCartItemDto,
-  ) {
+  ): Promise<MessageResponseDto> {
     const { cart, product, quantity } = await this.context(uuid, user, dto);
     const message = await this.cartItemService.decrease(
       cart,
@@ -48,11 +50,15 @@ export class CartItemFacade {
     uuid: string,
     user: UserInterface,
     dto: UpdateCartItemDto,
-  ) {
-    const cart = await this.cartService.findCartById(uuid);
+  ): Promise<{
+    cart: CartEntity;
+    product: ProductEntity;
+    quantity: number;
+  }> {
+    const cart = await this.cartService.findOne(uuid);
     checkUserPermission(user, cart.user.id);
     this.cartService.assertCartIsAvailable(cart);
-    const product = await this.productService.findProductById(dto.product);
+    const product = await this.productService.findOne(dto.product);
     const quantity = dto.quantity;
     return { cart, product, quantity };
   }

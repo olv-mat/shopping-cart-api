@@ -35,7 +35,7 @@ export class CartItemController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async increase(
+  public increase(
     @Param() { uuid }: UuidDto,
     @User() user: UserInterface,
     @Body() dto: UpdateCartItemDto,
@@ -52,7 +52,7 @@ export class CartItemController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async decrease(
+  public decrease(
     @Param() { uuid }: UuidDto,
     @User() user: UserInterface,
     @Body() dto: UpdateCartItemDto,

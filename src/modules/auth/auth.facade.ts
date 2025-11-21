@@ -18,7 +18,7 @@ export class AuthFacade {
     admin: boolean,
   ): Promise<AuthResponseDto> {
     const { user, token } = await this.authService.register(dto, admin);
-    if (!admin) await this.cartService.createCart(user);
+    if (!admin) await this.cartService.create(user);
     return AuthMapper.toResponse(user.id, token);
   }
 

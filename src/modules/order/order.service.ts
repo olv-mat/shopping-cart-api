@@ -21,7 +21,7 @@ export class OrderService {
   }
 
   public async findOne(uuid: string): Promise<OrderEntity> {
-    return await this.findOrderById(uuid);
+    return await this.getOrderById(uuid);
   }
 
   public async create(cart: CartEntity): Promise<OrderEntity> {
@@ -53,7 +53,7 @@ export class OrderService {
     await this.orderRepository.delete(order.id);
   }
 
-  private async findOrderById(uuid: string): Promise<OrderEntity> {
+  private async getOrderById(uuid: string): Promise<OrderEntity> {
     const order = await this.orderRepository.findOne({
       where: { id: uuid },
       relations: ['cart', 'cart.user'],

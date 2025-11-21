@@ -22,11 +22,11 @@ export class CategoryService {
   }
 
   public async findOne(uuid: string): Promise<CategoryEntity> {
-    return await this.findCategoryById(uuid);
+    return await this.getCategoryById(uuid);
   }
 
   public async create(dto: CategoryDto): Promise<DefaultResponseDto> {
-    await this.checkCategoryExists(dto.category);
+    await this.assertCategoryNotExists(dto.category);
     const category = await this.categoryRepository.save(dto);
     return ResponseMapper.toResponse(
       DefaultResponseDto,
@@ -39,7 +39,7 @@ export class CategoryService {
     uuid: string,
     dto: CategoryDto,
   ): Promise<DefaultResponseDto> {
-    const category = await this.findCategoryById(uuid);
+    const category = await this.getCategoryById(uuid);
     await this.categoryRepository.update(category.id, dto);
     return ResponseMapper.toResponse(
       DefaultResponseDto,
@@ -49,7 +49,7 @@ export class CategoryService {
   }
 
   public async delete(uuid: string): Promise<DefaultResponseDto> {
-    const category = await this.findCategoryById(uuid);
+    const category = await this.getCategoryById(uuid);
     await this.categoryRepository.delete(category.id);
     return ResponseMapper.toResponse(
       DefaultResponseDto,
@@ -58,7 +58,7 @@ export class CategoryService {
     );
   }
 
-  private async findCategoryById(uuid: string): Promise<CategoryEntity> {
+  private async getCategoryById(uuid: string): Promise<CategoryEntity> {
     const category = await this.categoryRepository.findOne({
       where: { id: uuid },
     });
@@ -66,7 +66,7 @@ export class CategoryService {
     return category;
   }
 
-  private async checkCategoryExists(name: string): Promise<void> {
+  private async assertCategoryNotExists(name: string): Promise<void> {
     const category = await this.categoryRepository.findOne({
       where: { category: name },
     });

@@ -21,17 +21,11 @@ export class CartService {
   }
 
   public async findOne(uuid: string): Promise<CartEntity> {
-    return await this.findCartById(uuid);
+    return await this.getCartById(uuid);
   }
 
-  public async createCart(user: UserEntity): Promise<CartEntity> {
+  public async create(user: UserEntity): Promise<CartEntity> {
     return await this.cartRepository.save({ user: user });
-  }
-
-  public async findCartById(uuid: string): Promise<CartEntity> {
-    const cart = await this.cartRepository.findOneBy({ id: uuid });
-    if (!cart) throw new NotFoundException('Cart not found');
-    return cart;
   }
 
   public assertCartIsAvailable(cart: CartEntity): void {
@@ -51,5 +45,11 @@ export class CartService {
     status: CartStatus,
   ): Promise<void> {
     await this.cartRepository.update(cart.id, { status: status });
+  }
+
+  private async getCartById(uuid: string): Promise<CartEntity> {
+    const cart = await this.cartRepository.findOneBy({ id: uuid });
+    if (!cart) throw new NotFoundException('Cart not found');
+    return cart;
   }
 }
