@@ -15,7 +15,6 @@ export class CategoryService {
   constructor(
     @InjectRepository(CategoryEntity)
     private readonly categoryRepository: Repository<CategoryEntity>,
-    private readonly responseMapper: ResponseMapper,
   ) {}
 
   public async findAll(): Promise<CategoryEntity[]> {
@@ -29,7 +28,8 @@ export class CategoryService {
   public async create(dto: CategoryDto): Promise<DefaultResponseDto> {
     await this.checkCategoryExists(dto.category);
     const category = await this.categoryRepository.save(dto);
-    return this.responseMapper.toDefaultResponse(
+    return ResponseMapper.toResponse(
+      DefaultResponseDto,
       category.id,
       'Category created successfully',
     );
@@ -41,7 +41,8 @@ export class CategoryService {
   ): Promise<DefaultResponseDto> {
     const category = await this.findCategoryById(uuid);
     await this.categoryRepository.update(category.id, dto);
-    return this.responseMapper.toDefaultResponse(
+    return ResponseMapper.toResponse(
+      DefaultResponseDto,
       uuid,
       'Category updated successfully',
     );
@@ -50,7 +51,8 @@ export class CategoryService {
   public async delete(uuid: string): Promise<DefaultResponseDto> {
     const category = await this.findCategoryById(uuid);
     await this.categoryRepository.delete(category.id);
-    return this.responseMapper.toDefaultResponse(
+    return ResponseMapper.toResponse(
+      DefaultResponseDto,
       uuid,
       'Category deleted successfully',
     );
@@ -60,9 +62,7 @@ export class CategoryService {
     const category = await this.categoryRepository.findOne({
       where: { id: uuid },
     });
-    if (!category) {
-      throw new NotFoundException('Category not found');
-    }
+    if (!category) throw new NotFoundException('Category not found');
     return category;
   }
 
@@ -70,8 +70,6 @@ export class CategoryService {
     const category = await this.categoryRepository.findOne({
       where: { category: name },
     });
-    if (category) {
-      throw new ConflictException('Category already exists');
-    }
+    if (category) throw new ConflictException('Category already exists');
   }
 }

@@ -41,7 +41,7 @@ export class CategoryController {
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerInternalServerError()
-  public async findAll(): Promise<CategoryEntity[]> {
+  public findAll(): Promise<CategoryEntity[]> {
     return this.categoryService.findAll();
   }
 
@@ -52,7 +52,7 @@ export class CategoryController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async findOne(
+  public findOne(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
   ): Promise<CategoryEntity> {
     return this.categoryService.findOne(uuid);
@@ -65,7 +65,7 @@ export class CategoryController {
   @SwaggerForbidden()
   @SwaggerConflict()
   @SwaggerInternalServerError()
-  public async create(@Body() dto: CategoryDto): Promise<DefaultResponseDto> {
+  public create(@Body() dto: CategoryDto): Promise<DefaultResponseDto> {
     return this.categoryService.create(dto);
   }
 
@@ -76,7 +76,7 @@ export class CategoryController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async update(
+  public update(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
     @Body() dto: CategoryDto,
   ): Promise<DefaultResponseDto> {
@@ -90,7 +90,7 @@ export class CategoryController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async delete(
+  public delete(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
   ): Promise<DefaultResponseDto> {
     return this.categoryService.delete(uuid);
