@@ -34,12 +34,12 @@ export class ProductEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: string;
 
-  @CreateDateColumn({ name: 'created_at', select: false })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at', select: false })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: 'deleted_at', select: false })
+  @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: Date;
 }

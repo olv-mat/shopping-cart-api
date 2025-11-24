@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
-import { IPaginationMeta } from 'nestjs-typeorm-paginate';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
+import { MessageResponseDto } from 'src/common/dtos/MessageResponse.dto';
 import {
   SwaggerConflict,
   SwaggerCreated,
@@ -27,8 +27,8 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { UserRoles } from '../user/enums/user-roles.enum';
 import { CreateProductDto } from './dtos/CreateProduct.dto';
+import { ProductResponseDto } from './dtos/ProductResponse.dto';
 import { UpdateProductDto } from './dtos/UpdateProduct.dto';
-import { ProductEntity } from './entities/product.entity';
 import { ProductService } from './product.service';
 
 // npm install nestjs-typeorm-paginate
@@ -44,21 +44,14 @@ export class ProductController {
   @ApiOperation({ summary: 'Retrieve all products with optional filters' })
   @ApiQuery({ name: 'category', required: false })
   @ApiQuery({ name: 'search', required: false })
-  @ApiQuery({ name: 'page', required: false })
-  @ApiQuery({ name: 'limit', required: false })
   @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerInternalServerError()
   public findAll(
     @Query('category') category?: string,
     @Query('search') search?: string,
-    @Query('page') page = 1,
-    @Query('limit') limit = 10,
-  ): Promise<{
-    items: ProductEntity[];
-    meta: IPaginationMeta;
-  }> {
-    return this.productService.findAll({ category, search }, { page, limit });
+  ): Promise<ProductResponseDto[]> {
+    return this.productService.findAll({ category, search });
   }
 
   @Get(':uuid')
@@ -68,7 +61,7 @@ export class ProductController {
   @SwaggerUnauthorized()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public findOne(@Param() { uuid }: UuidDto): Promise<ProductEntity> {
+  public findOne(@Param() { uuid }: UuidDto): Promise<ProductResponseDto> {
     return this.productService.findOne(uuid);
   }
 
@@ -96,7 +89,7 @@ export class ProductController {
   public update(
     @Param() { uuid }: UuidDto,
     @Body() dto: UpdateProductDto,
-  ): Promise<DefaultResponseDto> {
+  ): Promise<MessageResponseDto> {
     return this.productService.update(uuid, dto);
   }
 
@@ -108,7 +101,7 @@ export class ProductController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public delete(@Param() { uuid }: UuidDto): Promise<DefaultResponseDto> {
+  public delete(@Param() { uuid }: UuidDto): Promise<MessageResponseDto> {
     return this.productService.delete(uuid);
   }
 }

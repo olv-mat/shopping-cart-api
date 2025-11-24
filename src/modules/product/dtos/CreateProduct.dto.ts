@@ -12,16 +12,16 @@ export class CreateProductDto {
   @IsString()
   @MaxLength(255)
   @Matches(/\S/, { message: 'product cannot contain only spaces' })
-  product: string;
+  public readonly product: string;
 
   @CategoryIdProperty()
   @IsNotEmpty()
   @CategoryExists({ message: 'this category does not exist' })
-  category: string;
+  public readonly category: string;
 
   @PriceProperty()
   @IsNotEmpty()
   @IsString()
   @Matches(/\S/, { message: 'price cannot contain only spaces' })
-  price: string;
+  public readonly price: string;
 }

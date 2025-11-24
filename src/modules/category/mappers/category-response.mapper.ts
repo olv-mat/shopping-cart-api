@@ -5,7 +5,7 @@ export class CategoryResponseMapper {
   public static toResponseOne = this.toDto;
   public static toResponseMany = this.toDtoList;
 
-  private static toDto(category: CategoryEntity): CategoryResponseDto {
+  public static toDto(category: CategoryEntity): CategoryResponseDto {
     return new CategoryResponseDto(category.id, category.category);
   }
 
