@@ -9,5 +9,5 @@ export class CategoryDto {
   @IsNotEmpty()
   @MaxLength(255)
   @Matches(/\S/, { message: 'category cannot contain only spaces' })
-  category: string;
+  public readonly category: string;
 }

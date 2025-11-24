@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { MessageResponseDto } from 'src/common/dtos/MessageResponse.dto';
 import {
   SwaggerConflict,
   SwaggerCreated,
@@ -26,7 +27,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { UserRoles } from '../user/enums/user-roles.enum';
 import { CategoryService } from './category.service';
 import { CategoryDto } from './dtos/Category.dto';
-import { CategoryEntity } from './entities/category.entity';
+import { CategoryResponseDto } from './dtos/CategoryResponse.dto';
 
 @ApiBearerAuth()
 @Controller('categories')
@@ -41,7 +42,7 @@ export class CategoryController {
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerInternalServerError()
-  public findAll(): Promise<CategoryEntity[]> {
+  public findAll(): Promise<CategoryResponseDto[]> {
     return this.categoryService.findAll();
   }
 
@@ -54,7 +55,7 @@ export class CategoryController {
   @SwaggerInternalServerError()
   public findOne(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
-  ): Promise<CategoryEntity> {
+  ): Promise<CategoryResponseDto> {
     return this.categoryService.findOne(uuid);
   }
 
@@ -79,7 +80,7 @@ export class CategoryController {
   public update(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
     @Body() dto: CategoryDto,
-  ): Promise<DefaultResponseDto> {
+  ): Promise<MessageResponseDto> {
     return this.categoryService.update(uuid, dto);
   }
 
@@ -92,7 +93,7 @@ export class CategoryController {
   @SwaggerInternalServerError()
   public delete(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
-  ): Promise<DefaultResponseDto> {
+  ): Promise<MessageResponseDto> {
     return this.categoryService.delete(uuid);
   }
 }

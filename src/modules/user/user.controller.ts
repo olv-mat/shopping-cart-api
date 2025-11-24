@@ -40,7 +40,7 @@ export class UserController {
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerInternalServerError()
-  public async findAll(): Promise<UserResponseDto | UserResponseDto[]> {
+  public findAll(): Promise<UserResponseDto[]> {
     return this.userFacade.findAll();
   }
 
@@ -52,10 +52,10 @@ export class UserController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async findOne(
+  public findOne(
     @Param() { uuid }: UuidDto,
     @User() user: UserInterface,
-  ): Promise<UserResponseDto | UserResponseDto[]> {
+  ): Promise<UserResponseDto> {
     return this.userFacade.findOne(uuid, user);
   }
 
@@ -67,7 +67,7 @@ export class UserController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async update(
+  public update(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
     @Body() dto: UpdateUserDto,
@@ -83,7 +83,7 @@ export class UserController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public async delete(
+  public delete(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
   ): Promise<MessageResponseDto> {

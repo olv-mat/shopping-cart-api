@@ -4,11 +4,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MessageResponseDto } from 'src/common/dtos/MessageResponse.dto';
 import { Repository } from 'typeorm';
 import { DefaultResponseDto } from '../../common/dtos/DefaultResponse.dto';
 import { ResponseMapper } from '../../common/mappers/response.mapper';
 import { CategoryDto } from './dtos/Category.dto';
+import { CategoryResponseDto } from './dtos/CategoryResponse.dto';
 import { CategoryEntity } from './entities/category.entity';
+import { CategoryResponseMapper } from './mappers/category-response.mapper';
 
 @Injectable()
 export class CategoryService {
@@ -17,12 +20,14 @@ export class CategoryService {
     private readonly categoryRepository: Repository<CategoryEntity>,
   ) {}
 
-  public async findAll(): Promise<CategoryEntity[]> {
-    return await this.categoryRepository.find();
+  public async findAll(): Promise<CategoryResponseDto[]> {
+    const categoryEntities = await this.categoryRepository.find();
+    return CategoryResponseMapper.toResponseMany(categoryEntities);
   }
 
-  public async findOne(uuid: string): Promise<CategoryEntity> {
-    return await this.getCategoryById(uuid);
+  public async findOne(uuid: string): Promise<CategoryResponseDto> {
+    const categoryEntity = await this.getCategoryById(uuid);
+    return CategoryResponseMapper.toResponseOne(categoryEntity);
   }
 
   public async create(dto: CategoryDto): Promise<DefaultResponseDto> {
@@ -38,22 +43,20 @@ export class CategoryService {
   public async update(
     uuid: string,
     dto: CategoryDto,
-  ): Promise<DefaultResponseDto> {
+  ): Promise<MessageResponseDto> {
     const category = await this.getCategoryById(uuid);
     await this.categoryRepository.update(category.id, dto);
     return ResponseMapper.toResponse(
-      DefaultResponseDto,
-      uuid,
+      MessageResponseDto,
       'Category updated successfully',
     );
   }
 
-  public async delete(uuid: string): Promise<DefaultResponseDto> {
+  public async delete(uuid: string): Promise<MessageResponseDto> {
     const category = await this.getCategoryById(uuid);
     await this.categoryRepository.delete(category.id);
     return ResponseMapper.toResponse(
-      DefaultResponseDto,
-      uuid,
+      MessageResponseDto,
       'Category deleted successfully',
     );
   }
