@@ -13,7 +13,7 @@ export class UserEntity {
   @Column({ length: 255, nullable: false, unique: true })
   email: string;
 
-  @Column({ length: 255, nullable: false, select: false })
+  @Column({ length: 255, nullable: false })
   password: string;
 
   @Column({ type: 'enum', enum: UserRoles, default: UserRoles.CUSTOMER })

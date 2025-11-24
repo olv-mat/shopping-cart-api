@@ -10,7 +10,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { User } from 'src/common/decorators/user.decorator';
-import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
+import { MessageResponseDto } from 'src/common/dtos/MessageResponse.dto';
 import { UuidDto } from 'src/common/dtos/Uuid.dto';
 import { UserInterface } from 'src/common/interfaces/user.interface';
 import {
@@ -23,15 +23,15 @@ import {
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
-import { UserEntity } from './entities/user.entity';
+import { UserResponseDto } from './dtos/UserResponse.dto';
 import { UserRoles } from './enums/user-roles.enum';
-import { UserService } from './user.service';
+import { UserFacade } from './user.facade';
 
 @ApiBearerAuth()
 @Controller('users')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userFacade: UserFacade) {}
 
   @Get()
   @Roles(UserRoles.ADMIN)
@@ -40,8 +40,8 @@ export class UserController {
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerInternalServerError()
-  public async findAll(): Promise<UserEntity[]> {
-    return this.userService.findAll();
+  public async findAll(): Promise<UserResponseDto | UserResponseDto[]> {
+    return this.userFacade.findAll();
   }
 
   @Get(':uuid')
@@ -53,10 +53,10 @@ export class UserController {
   @SwaggerNotFound()
   @SwaggerInternalServerError()
   public async findOne(
-    @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
-  ): Promise<UserEntity> {
-    return this.userService.findOne(user, uuid);
+    @User() user: UserInterface,
+  ): Promise<UserResponseDto | UserResponseDto[]> {
+    return this.userFacade.findOne(uuid, user);
   }
 
   @Patch(':uuid')
@@ -71,8 +71,8 @@ export class UserController {
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
     @Body() dto: UpdateUserDto,
-  ): Promise<DefaultResponseDto> {
-    return this.userService.update(user, uuid, dto);
+  ): Promise<MessageResponseDto> {
+    return this.userFacade.update(user, uuid, dto);
   }
 
   @Delete(':uuid')
@@ -86,7 +86,7 @@ export class UserController {
   public async delete(
     @User() user: UserInterface,
     @Param() { uuid }: UuidDto,
-  ): Promise<DefaultResponseDto> {
-    return this.userService.delete(user, uuid);
+  ): Promise<MessageResponseDto> {
+    return this.userFacade.delete(user, uuid);
   }
 }

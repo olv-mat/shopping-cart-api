@@ -3,9 +3,9 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsStrongPassword,
   Matches,
   MaxLength,
-  MinLength,
 } from 'class-validator';
 import {
   EmailProperty,
@@ -20,7 +20,7 @@ export class UpdateUserDto {
   @IsString()
   @MaxLength(255)
   @Matches(/\S/, { message: 'name cannot contain only spaces' })
-  name?: string;
+  public readonly name?: string;
 
   @EmailProperty()
   @IsOptional()
@@ -28,17 +28,13 @@ export class UpdateUserDto {
   @IsEmail()
   @MaxLength(255)
   @Matches(/\S/, { message: 'email cannot contain only spaces' })
-  email?: string;
+  public readonly email?: string;
 
   @PasswordProperty()
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  @MinLength(8)
   @MaxLength(255)
-  @Matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).+$/, {
-    message:
-      'password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
-  })
-  password?: string;
+  @IsStrongPassword()
+  public readonly password?: string;
 }

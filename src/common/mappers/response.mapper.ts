@@ -1,21 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { DefaultResponseDto } from '../dtos/DefaultResponse.dto';
-import { MessageResponseDto } from '../dtos/MessageResponse.dto';
-
-@Injectable()
 export class ResponseMapper {
   public static toResponse<T>(
     dto: new (...args: any[]) => T,
     ...args: ConstructorParameters<typeof dto>
   ): T {
     return new dto(...args);
-  }
-
-  public toDefaultResponse(uuid: string, message: string): DefaultResponseDto {
-    return new DefaultResponseDto(uuid, message);
-  }
-
-  public toMessageResponse(message: string): MessageResponseDto {
-    return new MessageResponseDto(message);
   }
 }
