@@ -14,18 +14,14 @@ import {
 import { Roles } from 'src/modules/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 import { UserRoles } from 'src/modules/user/enums/user-roles.enum';
-import { CartEntity } from '../entities/cart.entity';
+import { CartResponseDto } from '../dtos/CartResponse.dto';
 import { CartFacade } from '../facades/cart.facade';
-import { CartService } from '../services/cart.service';
 
 @ApiBearerAuth()
 @Controller('carts')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class CartController {
-  constructor(
-    private readonly cartService: CartService,
-    private readonly cartFacade: CartFacade,
-  ) {}
+  constructor(private readonly cartFacade: CartFacade) {}
 
   @Get()
   @Roles(UserRoles.ADMIN)
@@ -34,8 +30,8 @@ export class CartController {
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerInternalServerError()
-  public findAll(): Promise<CartEntity[]> {
-    return this.cartService.findAll();
+  public findAll(): Promise<CartResponseDto[]> {
+    return this.cartFacade.findAll();
   }
 
   @Get(':uuid')
@@ -49,7 +45,7 @@ export class CartController {
   public findOne(
     @Param() { uuid }: UuidDto,
     @User() user: UserInterface,
-  ): Promise<CartEntity> {
+  ): Promise<CartResponseDto> {
     return this.cartFacade.findOne(uuid, user);
   }
 }

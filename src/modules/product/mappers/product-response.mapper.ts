@@ -6,7 +6,7 @@ export class ProductResponseMapper {
   public static toResponseOne = this.toDto;
   public static toResponseMany = this.toDtoList;
 
-  private static toDto(product: ProductEntity): ProductResponseDto {
+  public static toDto(product: ProductEntity): ProductResponseDto {
     const category = CategoryResponseMapper.toDto(product.category);
     return new ProductResponseDto(
       product.id,

@@ -7,10 +7,10 @@ import {
 export class UpdateCartItemDto {
   @ProductIdProperty()
   @IsUUID()
-  product: string;
+  public readonly product: string;
 
   @QuantityProperty()
   @IsInt()
   @Min(1)
-  quantity: number;
+  public readonly quantity: number;
 }

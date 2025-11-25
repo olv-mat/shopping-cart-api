@@ -15,7 +15,9 @@ export class OrderEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => CartEntity, (cart) => cart.order)
+  @OneToOne(() => CartEntity, (cart) => cart.order, {
+    eager: true,
+  })
   @JoinColumn({ name: 'cart_id' })
   cart: CartEntity;
 
@@ -29,9 +31,9 @@ export class OrderEntity {
   })
   status: OrderStatus;
 
-  @CreateDateColumn({ name: 'created_at', select: false })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at', select: false })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

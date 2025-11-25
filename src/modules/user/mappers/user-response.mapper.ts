@@ -5,7 +5,7 @@ export class UserResponseMapper {
   public static toResponseOne = this.toDto;
   public static toResponseMany = this.toDtoList;
 
-  private static toDto(user: UserEntity): UserResponseDto {
+  public static toDto(user: UserEntity): UserResponseDto {
     const { id, name, email } = user;
     return new UserResponseDto(id, name, email);
   }

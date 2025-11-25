@@ -1,3 +1,5 @@
+import { OrderEntity } from 'src/modules/order/entities/order.entity';
+import { UserEntity } from 'src/modules/user/entities/user.entity';
 import {
   Column,
   Entity,
@@ -8,9 +10,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CartStatus } from '../enums/cart-status.enum';
-import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { CartItemEntity } from './cart-item.entity';
-import { OrderEntity } from 'src/modules/order/entities/order.entity';
 
 @Entity({ name: 'carts' })
 export class CartEntity {
@@ -32,8 +32,6 @@ export class CartEntity {
   })
   items: CartItemEntity[];
 
-  @OneToOne(() => OrderEntity, (order) => order.cart, {
-    eager: true,
-  })
+  @OneToOne(() => OrderEntity, (order) => order.cart)
   order: OrderEntity;
 }
