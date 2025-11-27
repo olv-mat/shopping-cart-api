@@ -41,7 +41,7 @@ export class UserService {
     await this.userRepository.delete(user.id);
   }
 
-  public async getUserById(uuid: string): Promise<UserEntity> {
+  private async getUserById(uuid: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id: uuid } });
     if (!user) throw new NotFoundException('User not found');
     return user;

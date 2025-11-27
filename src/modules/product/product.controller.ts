@@ -13,6 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
 import { MessageResponseDto } from 'src/common/dtos/MessageResponse.dto';
+import { ResponseMapper } from 'src/common/mappers/response.mapper';
 import {
   SwaggerConflict,
   SwaggerCreated,
@@ -29,6 +30,7 @@ import { UserRoles } from '../user/enums/user-roles.enum';
 import { CreateProductDto } from './dtos/CreateProduct.dto';
 import { ProductResponseDto } from './dtos/ProductResponse.dto';
 import { UpdateProductDto } from './dtos/UpdateProduct.dto';
+import { ProductResponseMapper } from './mappers/product-response.mapper';
 import { ProductService } from './product.service';
 
 // npm install nestjs-typeorm-paginate
@@ -47,11 +49,15 @@ export class ProductController {
   @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerInternalServerError()
-  public findAll(
+  public async findAll(
     @Query('category') category?: string,
     @Query('search') search?: string,
   ): Promise<ProductResponseDto[]> {
-    return this.productService.findAll({ category, search });
+    const productEntities = await this.productService.findAll({
+      category,
+      search,
+    });
+    return ProductResponseMapper.toResponseMany(productEntities);
   }
 
   @Get(':uuid')
@@ -61,8 +67,11 @@ export class ProductController {
   @SwaggerUnauthorized()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public findOne(@Param() { uuid }: UuidDto): Promise<ProductResponseDto> {
-    return this.productService.findOne(uuid);
+  public async findOne(
+    @Param() { uuid }: UuidDto,
+  ): Promise<ProductResponseDto> {
+    const productEntity = await this.productService.findOne(uuid);
+    return ProductResponseMapper.toResponseOne(productEntity);
   }
 
   @Post()
@@ -74,8 +83,15 @@ export class ProductController {
   @SwaggerNotFound()
   @SwaggerConflict()
   @SwaggerInternalServerError()
-  public create(@Body() dto: CreateProductDto): Promise<DefaultResponseDto> {
-    return this.productService.create(dto);
+  public async create(
+    @Body() dto: CreateProductDto,
+  ): Promise<DefaultResponseDto> {
+    const productEntity = await this.productService.create(dto);
+    return ResponseMapper.toResponse(
+      DefaultResponseDto,
+      productEntity.id,
+      'Product created successfully',
+    );
   }
 
   @Patch(':uuid')
@@ -86,11 +102,15 @@ export class ProductController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public update(
-    @Param() { uuid }: UuidDto,
+  public async update(
     @Body() dto: UpdateProductDto,
+    @Param() { uuid }: UuidDto,
   ): Promise<MessageResponseDto> {
-    return this.productService.update(uuid, dto);
+    await this.productService.update(dto, uuid);
+    return ResponseMapper.toResponse(
+      MessageResponseDto,
+      'Product updated successfully',
+    );
   }
 
   @Delete(':uuid')
@@ -101,7 +121,11 @@ export class ProductController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public delete(@Param() { uuid }: UuidDto): Promise<MessageResponseDto> {
-    return this.productService.delete(uuid);
+  public async delete(@Param() { uuid }: UuidDto): Promise<MessageResponseDto> {
+    await this.productService.delete(uuid);
+    return ResponseMapper.toResponse(
+      MessageResponseDto,
+      'Product deleted successfully',
+    );
   }
 }

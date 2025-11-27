@@ -48,7 +48,7 @@ export class OrderFacade {
   ): Promise<DefaultResponseDto> {
     const order = await this.orderContext(uuid, user);
     await this.orderService.pay(order);
-    const storedUser = await this.userService.getUserById(order.cart.user.id);
+    const storedUser = await this.userService.findOne(order.cart.user.id);
     await this.cartService.create(storedUser);
     return ResponseMapper.toResponse(
       DefaultResponseDto,
