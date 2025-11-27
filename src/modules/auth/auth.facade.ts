@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CartService } from '../cart/services/cart.service';
+import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { AuthResponseDto } from './dtos/AuthResponse.dto';
 import { LoginDto } from './dtos/Login.dto';
@@ -9,6 +10,7 @@ import { AuthMapper } from './mappers/auth.mapper';
 @Injectable()
 export class AuthFacade {
   constructor(
+    private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly cartService: CartService,
   ) {}
@@ -17,13 +19,15 @@ export class AuthFacade {
     dto: RegisterDto,
     admin: boolean,
   ): Promise<AuthResponseDto> {
-    const { user, token } = await this.authService.register(dto, admin);
+    const user = await this.userService.create(dto, admin);
+    const token = this.authService.generateToken(user);
     if (!admin) await this.cartService.create(user);
     return AuthMapper.toResponse(user.id, token);
   }
 
   public async login(dto: LoginDto): Promise<AuthResponseDto> {
-    const { user, token } = await this.authService.login(dto);
+    const user = await this.userService.getUserByEmail(dto.email);
+    const token = await this.authService.authenticate(dto.password, user);
     return AuthMapper.toResponse(user.id, token);
   }
 }

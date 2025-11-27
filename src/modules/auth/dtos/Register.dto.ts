@@ -18,14 +18,14 @@ export class RegisterDto {
   @IsString()
   @MaxLength(255)
   @Matches(/\S/, { message: 'name cannot contain only spaces' })
-  name: string;
+  public readonly name: string;
 
   @EmailProperty()
   @IsNotEmpty()
   @IsEmail()
   @MaxLength(255)
   @Matches(/\S/, { message: 'email cannot contain only spaces' })
-  email: string;
+  public readonly email: string;
 
   @PasswordProperty()
   @IsNotEmpty()
@@ -36,5 +36,5 @@ export class RegisterDto {
     message:
       'password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
   })
-  password: string;
+  public readonly password: string;
 }

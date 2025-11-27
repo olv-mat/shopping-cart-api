@@ -9,11 +9,11 @@ export class LoginDto {
   @IsNotEmpty()
   @IsEmail()
   @Matches(/\S/, { message: 'email cannot contain only spaces' })
-  email: string;
+  public readonly email: string;
 
   @PasswordProperty()
   @IsNotEmpty()
   @IsString()
   @Matches(/\S/, { message: 'password cannot contain only spaces' })
-  password: string;
+  public readonly password: string;
 }
