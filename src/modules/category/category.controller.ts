@@ -12,6 +12,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { MessageResponseDto } from 'src/common/dtos/MessageResponse.dto';
+import { ResponseMapper } from 'src/common/mappers/response.mapper';
 import {
   SwaggerConflict,
   SwaggerCreated,
@@ -28,6 +29,7 @@ import { UserRoles } from '../user/enums/user-roles.enum';
 import { CategoryService } from './category.service';
 import { CategoryDto } from './dtos/Category.dto';
 import { CategoryResponseDto } from './dtos/CategoryResponse.dto';
+import { CategoryResponseMapper } from './mappers/category-response.mapper';
 
 @ApiBearerAuth()
 @Controller('categories')
@@ -42,8 +44,9 @@ export class CategoryController {
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerInternalServerError()
-  public findAll(): Promise<CategoryResponseDto[]> {
-    return this.categoryService.findAll();
+  public async findAll(): Promise<CategoryResponseDto[]> {
+    const categoryEntities = await this.categoryService.findAll();
+    return CategoryResponseMapper.toResponseMany(categoryEntities);
   }
 
   @Get(':uuid')
@@ -53,10 +56,11 @@ export class CategoryController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public findOne(
+  public async findOne(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
   ): Promise<CategoryResponseDto> {
-    return this.categoryService.findOne(uuid);
+    const categoryEntity = await this.categoryService.findOne(uuid);
+    return CategoryResponseMapper.toResponseOne(categoryEntity);
   }
 
   @Post()
@@ -66,8 +70,13 @@ export class CategoryController {
   @SwaggerForbidden()
   @SwaggerConflict()
   @SwaggerInternalServerError()
-  public create(@Body() dto: CategoryDto): Promise<DefaultResponseDto> {
-    return this.categoryService.create(dto);
+  public async create(@Body() dto: CategoryDto): Promise<DefaultResponseDto> {
+    const categoryEntity = await this.categoryService.create(dto);
+    return ResponseMapper.toResponse(
+      DefaultResponseDto,
+      categoryEntity.id,
+      'Category created successfully',
+    );
   }
 
   @Put(':uuid')
@@ -77,11 +86,15 @@ export class CategoryController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public update(
+  public async update(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
     @Body() dto: CategoryDto,
   ): Promise<MessageResponseDto> {
-    return this.categoryService.update(uuid, dto);
+    await this.categoryService.update(uuid, dto);
+    return ResponseMapper.toResponse(
+      MessageResponseDto,
+      'Category updated successfully',
+    );
   }
 
   @Delete(':uuid')
@@ -91,9 +104,13 @@ export class CategoryController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public delete(
+  public async delete(
     @Param('uuid', new ParseUUIDPipe()) uuid: string,
   ): Promise<MessageResponseDto> {
-    return this.categoryService.delete(uuid);
+    await this.categoryService.delete(uuid);
+    return ResponseMapper.toResponse(
+      MessageResponseDto,
+      'Category deleted successfully',
+    );
   }
 }

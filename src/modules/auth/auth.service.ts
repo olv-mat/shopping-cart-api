@@ -17,8 +17,8 @@ export class AuthService {
     password: string,
     user: UserEntity,
   ): Promise<string> {
-    const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword) throw new UnauthorizedException('Invalid password');
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) throw new UnauthorizedException('Invalid password');
     return this.generateToken(user);
   }
 
