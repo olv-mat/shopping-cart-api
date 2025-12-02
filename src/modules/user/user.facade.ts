@@ -3,6 +3,7 @@ import { MessageResponseDto } from 'src/common/dtos/MessageResponse.dto';
 import { UserInterface } from 'src/common/interfaces/user.interface';
 import { ResponseMapper } from 'src/common/mappers/response.mapper';
 import { checkUserPermission } from 'src/common/utils/check-user-permission.util';
+import { CartService } from '../cart/services/cart.service';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
 import { UserResponseDto } from './dtos/UserResponse.dto';
 import { UserResponseMapper } from './mappers/user-response.mapper';
@@ -10,20 +11,20 @@ import { UserService } from './user.service';
 
 @Injectable()
 export class UserFacade {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly cartService: CartService,
+  ) {}
 
   public async findAll(): Promise<UserResponseDto[]> {
     const userEntities = await this.userService.findAll();
     return UserResponseMapper.toResponseMany(userEntities);
   }
 
-  public async findOne(
-    uuid: string,
-    user: UserInterface,
-  ): Promise<UserResponseDto> {
-    const userEntity = await this.userService.findOne(uuid);
-    checkUserPermission(user, userEntity.id);
-    return UserResponseMapper.toResponseOne(userEntity);
+  public async findMe(user: UserInterface): Promise<UserResponseDto> {
+    const userEntity = await this.userService.findOne(user.sub);
+    const currentCart = await this.cartService.getCurrentCart(userEntity);
+    return UserResponseMapper.toResponseOne(userEntity, currentCart);
   }
 
   public async update(

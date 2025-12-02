@@ -1,10 +1,17 @@
 export class UserResponseDto {
-  public readonly id: string;
+  public readonly userId: string;
+  public readonly cartId: string | null;
   public readonly name: string;
   public readonly email: string;
 
-  constructor(id: string, name: string, email: string) {
-    this.id = id;
+  constructor(
+    userId: string,
+    cartId: string | null,
+    name: string,
+    email: string,
+  ) {
+    this.userId = userId;
+    this.cartId = cartId;
     this.name = name;
     this.email = email;
   }

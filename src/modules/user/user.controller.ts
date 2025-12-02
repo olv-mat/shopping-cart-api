@@ -44,19 +44,16 @@ export class UserController {
     return this.userFacade.findAll();
   }
 
-  @Get(':uuid')
+  @Get('/me')
   @Roles(...Object.values(UserRoles))
-  @ApiOperation({ summary: 'Retrieve a specific user' })
+  @ApiOperation({ summary: 'Retrieve current user' })
   @SwaggerOk()
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public findOne(
-    @Param() { uuid }: UuidDto,
-    @User() user: UserInterface,
-  ): Promise<UserResponseDto> {
-    return this.userFacade.findOne(uuid, user);
+  public findMe(@User() user: UserInterface): Promise<UserResponseDto> {
+    return this.userFacade.findMe(user);
   }
 
   @Patch(':uuid')

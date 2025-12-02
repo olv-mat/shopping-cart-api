@@ -15,9 +15,7 @@ export class OrderEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => CartEntity, (cart) => cart.order, {
-    eager: true,
-  })
+  @OneToOne(() => CartEntity, (cart) => cart.order)
   @JoinColumn({ name: 'cart_id' })
   cart: CartEntity;
 

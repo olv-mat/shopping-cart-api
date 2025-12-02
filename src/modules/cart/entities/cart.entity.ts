@@ -32,6 +32,8 @@ export class CartEntity {
   })
   items: CartItemEntity[];
 
-  @OneToOne(() => OrderEntity, (order) => order.cart)
+  @OneToOne(() => OrderEntity, (order) => order.cart, {
+    eager: true,
+  })
   order: OrderEntity;
 }
