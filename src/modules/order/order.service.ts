@@ -16,15 +16,15 @@ export class OrderService {
     private readonly orderRepository: Repository<OrderEntity>,
   ) {}
 
-  public async findAll(): Promise<OrderEntity[]> {
+  public findAll(): Promise<OrderEntity[]> {
     return this.orderRepository.find();
   }
 
-  public async findOne(uuid: string): Promise<OrderEntity> {
-    return await this.getOrderById(uuid);
+  public findOne(uuid: string): Promise<OrderEntity> {
+    return this.getOrderById(uuid);
   }
 
-  public async create(cart: CartEntity): Promise<OrderEntity> {
+  public create(cart: CartEntity): Promise<OrderEntity> {
     const total_price = cart.items
       .reduce((acc, item) => {
         const price = Number(item.product.price);
@@ -32,7 +32,7 @@ export class OrderService {
       }, 0)
       .toFixed(2);
 
-    return await this.orderRepository.save({
+    return this.orderRepository.save({
       cart: cart,
       totalPrice: total_price,
     });

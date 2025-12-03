@@ -11,6 +11,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { User } from 'src/common/decorators/user.decorator';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
+import { MessageResponseDto } from 'src/common/dtos/MessageResponse.dto';
 import { UuidDto } from 'src/common/dtos/Uuid.dto';
 import { UserInterface } from 'src/common/interfaces/user.interface';
 import {
@@ -25,18 +26,14 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { UserRoles } from '../user/enums/user-roles.enum';
 import { CreateOrderDto } from './dtos/CreateOrder.dto';
-import { OrderEntity } from './entities/order.entity';
+import { OrderResponseDto } from './dtos/OrderResponse.dto';
 import { OrderFacade } from './order.facade';
-import { OrderService } from './order.service';
 
 @ApiBearerAuth()
 @Controller('orders')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class OrderController {
-  constructor(
-    private readonly orderService: OrderService,
-    private readonly orderFacade: OrderFacade,
-  ) {}
+  constructor(private readonly orderFacade: OrderFacade) {}
 
   @Get()
   @Roles(UserRoles.ADMIN)
@@ -45,8 +42,8 @@ export class OrderController {
   @SwaggerUnauthorized()
   @SwaggerForbidden()
   @SwaggerInternalServerError()
-  public findAll(): Promise<OrderEntity[]> {
-    return this.orderService.findAll();
+  public findAll(): Promise<OrderResponseDto[]> {
+    return this.orderFacade.findAll();
   }
 
   @Get(':uuid')
@@ -60,7 +57,7 @@ export class OrderController {
   public findOne(
     @Param() { uuid }: UuidDto,
     @User() user: UserInterface,
-  ): Promise<OrderEntity> {
+  ): Promise<OrderResponseDto> {
     return this.orderFacade.findOne(uuid, user);
   }
 
@@ -90,7 +87,7 @@ export class OrderController {
   public pay(
     @Param() { uuid }: UuidDto,
     @User() user: UserInterface,
-  ): Promise<DefaultResponseDto> {
+  ): Promise<MessageResponseDto> {
     return this.orderFacade.pay(uuid, user);
   }
 
@@ -105,7 +102,7 @@ export class OrderController {
   public delete(
     @Param() { uuid }: UuidDto,
     @User() user: UserInterface,
-  ): Promise<DefaultResponseDto> {
+  ): Promise<MessageResponseDto> {
     return this.orderFacade.delete(uuid, user);
   }
 }

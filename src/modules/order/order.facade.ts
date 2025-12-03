@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DefaultResponseDto } from 'src/common/dtos/DefaultResponse.dto';
+import { MessageResponseDto } from 'src/common/dtos/MessageResponse.dto';
 import { UserInterface } from 'src/common/interfaces/user.interface';
 import { ResponseMapper } from 'src/common/mappers/response.mapper';
 import { checkUserPermission } from 'src/common/utils/check-user-permission.util';
@@ -8,7 +9,9 @@ import { CartStatus } from '../cart/enums/cart-status.enum';
 import { CartService } from '../cart/services/cart.service';
 import { UserService } from '../user/user.service';
 import { CreateOrderDto } from './dtos/CreateOrder.dto';
+import { OrderResponseDto } from './dtos/OrderResponse.dto';
 import { OrderEntity } from './entities/order.entity';
+import { OrderResponseMapper } from './mappers/order-response.mapper';
 import { OrderService } from './order.service';
 
 @Injectable()
@@ -19,11 +22,17 @@ export class OrderFacade {
     private readonly userService: UserService,
   ) {}
 
+  public async findAll(): Promise<OrderResponseDto[]> {
+    const orderEntities = await this.orderService.findAll();
+    return OrderResponseMapper.toResponseMany(orderEntities);
+  }
+
   public async findOne(
     uuid: string,
     user: UserInterface,
-  ): Promise<OrderEntity> {
-    return await this.orderContext(uuid, user);
+  ): Promise<OrderResponseDto> {
+    const orderEntity = await this.orderContext(uuid, user);
+    return OrderResponseMapper.toResponseOne(orderEntity);
   }
 
   public async create(
@@ -45,14 +54,13 @@ export class OrderFacade {
   public async pay(
     uuid: string,
     user: UserInterface,
-  ): Promise<DefaultResponseDto> {
+  ): Promise<MessageResponseDto> {
     const order = await this.orderContext(uuid, user);
     await this.orderService.pay(order);
     const storedUser = await this.userService.findOne(order.cart.user.id);
     await this.cartService.create(storedUser);
     return ResponseMapper.toResponse(
-      DefaultResponseDto,
-      order.id,
+      MessageResponseDto,
       'Order marked as paid successfully',
     );
   }
@@ -60,14 +68,13 @@ export class OrderFacade {
   public async delete(
     uuid: string,
     user: UserInterface,
-  ): Promise<DefaultResponseDto> {
+  ): Promise<MessageResponseDto> {
     const order = await this.orderContext(uuid, user);
     const cart = await this.cartService.findOne(order.cart.id);
     await this.orderService.delete(order);
     await this.cartService.changeCartStatus(cart, CartStatus.OPEN);
     return ResponseMapper.toResponse(
-      DefaultResponseDto,
-      order.id,
+      MessageResponseDto,
       'Order deleted successfully',
     );
   }

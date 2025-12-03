@@ -4,5 +4,5 @@ import { CartIdProperty } from 'src/common/swagger/properties.swagger';
 export class CreateOrderDto {
   @CartIdProperty()
   @IsUUID()
-  cart: string;
+  public readonly cart: string;
 }
