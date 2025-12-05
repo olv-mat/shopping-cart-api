@@ -3,8 +3,12 @@ import { UserResponseDto } from '../dtos/UserResponse.dto';
 import { UserEntity } from '../entities/user.entity';
 
 export class UserResponseMapper {
-  public static toResponseOne = this.toDto;
-  public static toResponseMany = this.toDtoList;
+  public static toResponseMany = (userEntities: UserEntity[]) =>
+    this.toDtoList(userEntities);
+  public static toResponseOne = (
+    userEntity: UserEntity,
+    cartEntity: CartEntity | null = null,
+  ) => this.toDto(userEntity, cartEntity);
 
   public static toDto(
     userEntity: UserEntity,
@@ -15,7 +19,7 @@ export class UserResponseMapper {
     return new UserResponseDto(id, cartId, name, email);
   }
 
-  private static toDtoList(users: UserEntity[]): UserResponseDto[] {
-    return users.map((user) => this.toDto(user));
+  private static toDtoList(userEntities: UserEntity[]): UserResponseDto[] {
+    return userEntities.map((userEntity) => this.toDto(userEntity));
   }
 }

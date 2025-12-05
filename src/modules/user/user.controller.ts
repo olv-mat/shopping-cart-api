@@ -52,8 +52,8 @@ export class UserController {
   @SwaggerForbidden()
   @SwaggerNotFound()
   @SwaggerInternalServerError()
-  public findMe(@User() user: UserInterface): Promise<UserResponseDto> {
-    return this.userFacade.findMe(user);
+  public findOne(@User() user: UserInterface): Promise<UserResponseDto> {
+    return this.userFacade.findOne(user);
   }
 
   @Patch(':uuid')

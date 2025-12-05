@@ -21,7 +21,7 @@ export class UserFacade {
     return UserResponseMapper.toResponseMany(userEntities);
   }
 
-  public async findMe(user: UserInterface): Promise<UserResponseDto> {
+  public async findOne(user: UserInterface): Promise<UserResponseDto> {
     const userEntity = await this.userService.findOne(user.sub);
     const currentCart = await this.cartService.getCurrentCart(userEntity);
     return UserResponseMapper.toResponseOne(userEntity, currentCart);

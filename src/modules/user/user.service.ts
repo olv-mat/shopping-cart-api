@@ -19,17 +19,17 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  public async findAll(): Promise<UserEntity[]> {
-    return await this.userRepository.find();
+  public findAll(): Promise<UserEntity[]> {
+    return this.userRepository.find();
   }
 
-  public async findOne(uuid: string): Promise<UserEntity> {
-    return await this.getUserById(uuid);
+  public findOne(uuid: string): Promise<UserEntity> {
+    return this.getUserById(uuid);
   }
 
   public async create(dto: RegisterDto, admin: boolean): Promise<UserEntity> {
     await this.assertEmailNotUsed(dto.email);
-    return await this.userRepository.save({
+    return this.userRepository.save({
       ...dto,
       password: await bcrypt.hash(dto.password, 10),
       ...(admin && { role: UserRoles.ADMIN }),
