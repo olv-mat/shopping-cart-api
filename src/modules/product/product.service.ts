@@ -38,28 +38,28 @@ export class ProductService {
 
   public async update(dto: UpdateProductDto, uuid: string): Promise<void> {
     const payload = validateUpdatePayload(dto);
-    const product = await this.getProductById(uuid);
-    Object.assign(product, payload);
-    await this.productRepository.save(product);
+    const productEntity = await this.getProductById(uuid);
+    Object.assign(productEntity, payload);
+    await this.productRepository.save(productEntity);
   }
 
   public async delete(uuid: string): Promise<void> {
-    const product = await this.getProductById(uuid);
-    await this.productRepository.softDelete({ id: product.id });
+    const productEntity = await this.getProductById(uuid);
+    await this.productRepository.softDelete({ id: productEntity.id });
   }
 
   private async getProductById(uuid: string): Promise<ProductEntity> {
-    const product = await this.productRepository.findOne({
+    const productEntity = await this.productRepository.findOne({
       where: { id: uuid },
     });
-    if (!product) throw new NotFoundException('Product not found');
-    return product;
+    if (!productEntity) throw new NotFoundException('Product not found');
+    return productEntity;
   }
 
   private async assertProductNotExists(name: string): Promise<void> {
-    const product = await this.productRepository.findOne({
+    const productEntity = await this.productRepository.findOne({
       where: { product: name },
     });
-    if (product) throw new ConflictException('Product already exists');
+    if (productEntity) throw new ConflictException('Product already exists');
   }
 }

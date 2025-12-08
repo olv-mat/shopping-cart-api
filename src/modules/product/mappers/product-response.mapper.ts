@@ -3,8 +3,14 @@ import { ProductResponseDto } from '../dtos/ProductResponse.dto';
 import { ProductEntity } from '../entities/product.entity';
 
 export class ProductResponseMapper {
-  public static toResponseOne = this.toDto;
-  public static toResponseMany = this.toDtoList;
+  public static toResponseMany = (productEntities: ProductEntity[]) =>
+    this.toDtoList(productEntities);
+  public static toResponseOne = (productEntity: ProductEntity) =>
+    this.toDto(productEntity);
+
+  private static toDtoList(products: ProductEntity[]): ProductResponseDto[] {
+    return products.map((product) => this.toDto(product));
+  }
 
   public static toDto(product: ProductEntity): ProductResponseDto {
     const category = CategoryResponseMapper.toDto(product.category);
@@ -14,9 +20,5 @@ export class ProductResponseMapper {
       category,
       product.price,
     );
-  }
-
-  private static toDtoList(products: ProductEntity[]): ProductResponseDto[] {
-    return products.map((product) => this.toDto(product));
   }
 }

@@ -38,33 +38,37 @@ export class UserService {
 
   public async update(dto: UpdateUserDto, uuid: string): Promise<void> {
     const payload = validateUpdatePayload(dto);
-    const user = await this.getUserById(uuid);
+    const userEntity = await this.getUserById(uuid);
     if (payload.email) await this.assertEmailNotUsed(payload.email);
     if (payload.password) {
       payload.password = await bcrypt.hash(payload.password, 10);
     }
-    await this.userRepository.update(user.id, payload);
+    await this.userRepository.update(userEntity.id, payload);
   }
 
   public async delete(uuid: string): Promise<void> {
-    const user = await this.getUserById(uuid);
-    await this.userRepository.delete(user.id);
+    const userEntity = await this.getUserById(uuid);
+    await this.userRepository.delete(userEntity.id);
   }
 
   public async getUserByEmail(email: string): Promise<UserEntity> {
-    const user = await this.userRepository.findOneBy({ email: email });
-    if (!user) throw new NotFoundException('User not found');
-    return user;
+    const userEntity = await this.userRepository.findOneBy({ email: email });
+    if (!userEntity) throw new NotFoundException('User not found');
+    return userEntity;
   }
 
   private async getUserById(uuid: string): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({ where: { id: uuid } });
-    if (!user) throw new NotFoundException('User not found');
-    return user;
+    const userEntity = await this.userRepository.findOne({
+      where: { id: uuid },
+    });
+    if (!userEntity) throw new NotFoundException('User not found');
+    return userEntity;
   }
 
   private async assertEmailNotUsed(email: string): Promise<void> {
-    const user = await this.userRepository.findOne({ where: { email: email } });
-    if (user) throw new ConflictException('Email already in use');
+    const userEntity = await this.userRepository.findOne({
+      where: { email: email },
+    });
+    if (userEntity) throw new ConflictException('Email already in use');
   }
 }
