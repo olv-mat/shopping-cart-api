@@ -24,8 +24,8 @@ export class OrderService {
     return this.getOrderById(uuid);
   }
 
-  public create(cart: CartEntity): Promise<OrderEntity> {
-    const total_price = cart.items
+  public create(cartEntity: CartEntity): Promise<OrderEntity> {
+    const total_price = cartEntity.items
       .reduce((acc, item) => {
         const price = Number(item.product.price);
         return acc + price * item.quantity;
@@ -33,32 +33,32 @@ export class OrderService {
       .toFixed(2);
 
     return this.orderRepository.save({
-      cart: cart,
+      cart: cartEntity,
       totalPrice: total_price,
     });
   }
 
-  public async pay(order: OrderEntity): Promise<void> {
-    if (order.status !== OrderStatus.PENDING) {
+  public async pay(orderEntity: OrderEntity): Promise<void> {
+    if (orderEntity.status !== OrderStatus.PENDING) {
       throw new BadRequestException(
         'Order cannot be updated with current status',
       );
     }
-    await this.orderRepository.update(order.id, {
+    await this.orderRepository.update(orderEntity.id, {
       status: OrderStatus.PAID,
     });
   }
 
-  public async delete(order: OrderEntity): Promise<void> {
-    await this.orderRepository.delete(order.id);
+  public async delete(orderEntity: OrderEntity): Promise<void> {
+    await this.orderRepository.delete(orderEntity.id);
   }
 
   private async getOrderById(uuid: string): Promise<OrderEntity> {
-    const order = await this.orderRepository.findOne({
+    const orderEntity = await this.orderRepository.findOne({
       where: { id: uuid },
       relations: ['cart', 'cart.user'],
     });
-    if (!order) throw new NotFoundException('Order not found');
-    return order;
+    if (!orderEntity) throw new NotFoundException('Order not found');
+    return orderEntity;
   }
 }
