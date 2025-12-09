@@ -2,16 +2,19 @@ import { CategoryResponseDto } from '../dtos/CategoryResponse.dto';
 import { CategoryEntity } from '../entities/category.entity';
 
 export class CategoryResponseMapper {
-  public static toResponseOne = this.toDto;
-  public static toResponseMany = this.toDtoList;
+  public static toResponseMany = (categoryEntities: CategoryEntity[]) =>
+    this.toDtoList(categoryEntities);
 
-  public static toDto(category: CategoryEntity): CategoryResponseDto {
-    return new CategoryResponseDto(category.id, category.category);
-  }
+  public static toResponseOne = (categoryEntity: CategoryEntity) =>
+    this.toDto(categoryEntity);
 
   private static toDtoList(
-    categories: CategoryEntity[],
+    categoryEntities: CategoryEntity[],
   ): CategoryResponseDto[] {
-    return categories.map((category) => this.toDto(category));
+    return categoryEntities.map((categoryEntity) => this.toDto(categoryEntity));
+  }
+
+  public static toDto(categoryEntity: CategoryEntity): CategoryResponseDto {
+    return new CategoryResponseDto(categoryEntity.id, categoryEntity.category);
   }
 }

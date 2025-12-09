@@ -5,6 +5,7 @@ import { ProductEntity } from '../entities/product.entity';
 export class ProductResponseMapper {
   public static toResponseMany = (productEntities: ProductEntity[]) =>
     this.toDtoList(productEntities);
+
   public static toResponseOne = (productEntity: ProductEntity) =>
     this.toDto(productEntity);
 

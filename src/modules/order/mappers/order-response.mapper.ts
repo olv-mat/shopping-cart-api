@@ -4,6 +4,7 @@ import { OrderEntity } from '../entities/order.entity';
 export class OrderResponseMapper {
   public static toResponseMany = (orderEntities: OrderEntity[]) =>
     this.toDtoList(orderEntities);
+
   public static toResponseOne = (orderEntity: OrderEntity) =>
     this.toDto(orderEntity);
 

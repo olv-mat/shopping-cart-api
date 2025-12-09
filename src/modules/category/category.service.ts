@@ -29,27 +29,27 @@ export class CategoryService {
   }
 
   public async update(uuid: string, dto: CategoryDto): Promise<void> {
-    const category = await this.getCategoryById(uuid);
-    await this.categoryRepository.update(category.id, dto);
+    const categoryEntity = await this.getCategoryById(uuid);
+    await this.categoryRepository.update(categoryEntity.id, dto);
   }
 
   public async delete(uuid: string): Promise<void> {
-    const category = await this.getCategoryById(uuid);
-    await this.categoryRepository.delete(category.id);
+    const categoryEntity = await this.getCategoryById(uuid);
+    await this.categoryRepository.delete(categoryEntity.id);
   }
 
   private async getCategoryById(uuid: string): Promise<CategoryEntity> {
-    const category = await this.categoryRepository.findOne({
+    const categoryEntity = await this.categoryRepository.findOne({
       where: { id: uuid },
     });
-    if (!category) throw new NotFoundException('Category not found');
-    return category;
+    if (!categoryEntity) throw new NotFoundException('Category not found');
+    return categoryEntity;
   }
 
   private async assertCategoryNotExists(name: string): Promise<void> {
-    const category = await this.categoryRepository.findOne({
+    const categoryEntity = await this.categoryRepository.findOne({
       where: { category: name },
     });
-    if (category) throw new ConflictException('Category already exists');
+    if (categoryEntity) throw new ConflictException('Category already exists');
   }
 }

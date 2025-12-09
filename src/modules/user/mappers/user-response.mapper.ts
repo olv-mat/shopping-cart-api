@@ -5,6 +5,7 @@ import { UserEntity } from '../entities/user.entity';
 export class UserResponseMapper {
   public static toResponseMany = (userEntities: UserEntity[]) =>
     this.toDtoList(userEntities);
+
   public static toResponseOne = (
     userEntity: UserEntity,
     cartEntity: CartEntity | null = null,
