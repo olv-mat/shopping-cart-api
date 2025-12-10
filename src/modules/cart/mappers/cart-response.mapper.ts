@@ -1,20 +1,28 @@
+import { OrderResponseMapper } from 'src/modules/order/mappers/order-response.mapper';
 import { UserResponseMapper } from 'src/modules/user/mappers/user-response.mapper';
 import { CartResponseDto } from '../dtos/CartResponse.dto';
 import { CartEntity } from '../entities/cart.entity';
 import { CartItemResponseMapper } from './cart-item-response.mapper';
 
 export class CartResponseMapper {
-  public static toResponseOne = this.toDto;
-  public static toResponseMany = this.toDtoList;
+  public static toResponseMany = (cartEntities: CartEntity[]) =>
+    this.toDtoList(cartEntities);
 
-  public static toDto(cart: CartEntity): CartResponseDto {
-    const { id, status } = cart;
-    const user = UserResponseMapper.toDto(cart.user);
-    const items = CartItemResponseMapper.toDtoList(cart.items);
-    return new CartResponseDto(id, user, status, items);
+  public static toResponseOne = (cartEntity: CartEntity) =>
+    this.toDto(cartEntity);
+
+  private static toDtoList(cartEntities: CartEntity[]): CartResponseDto[] {
+    return cartEntities.map((cartEntity) => this.toDto(cartEntity));
   }
 
-  public static toDtoList(carts: CartEntity[]): CartResponseDto[] {
-    return carts.map((cart) => this.toDto(cart));
+  public static toDto(cartEntity: CartEntity): CartResponseDto {
+    const { id, status } = cartEntity;
+    return new CartResponseDto(
+      id,
+      UserResponseMapper.toDto(cartEntity.user),
+      status,
+      CartItemResponseMapper.toDtoList(cartEntity.items),
+      cartEntity.order ? OrderResponseMapper.toDto(cartEntity.order) : null,
+    );
   }
 }

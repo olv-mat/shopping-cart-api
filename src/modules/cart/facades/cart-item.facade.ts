@@ -23,10 +23,14 @@ export class CartItemFacade {
     user: UserInterface,
     dto: UpdateCartItemDto,
   ): Promise<MessageResponseDto> {
-    const { cart, product, quantity } = await this.context(uuid, user, dto);
+    const { cartEntity, productEntity, quantity } = await this.context(
+      uuid,
+      user,
+      dto,
+    );
     const message = await this.cartItemService.increase(
-      cart,
-      product,
+      cartEntity,
+      productEntity,
       quantity,
     );
     return ResponseMapper.toResponse(MessageResponseDto, message);
@@ -37,10 +41,14 @@ export class CartItemFacade {
     user: UserInterface,
     dto: UpdateCartItemDto,
   ): Promise<MessageResponseDto> {
-    const { cart, product, quantity } = await this.context(uuid, user, dto);
+    const { cartEntity, productEntity, quantity } = await this.context(
+      uuid,
+      user,
+      dto,
+    );
     const message = await this.cartItemService.decrease(
-      cart,
-      product,
+      cartEntity,
+      productEntity,
       quantity,
     );
     return ResponseMapper.toResponse(MessageResponseDto, message);
@@ -51,15 +59,15 @@ export class CartItemFacade {
     user: UserInterface,
     dto: UpdateCartItemDto,
   ): Promise<{
-    cart: CartEntity;
-    product: ProductEntity;
+    cartEntity: CartEntity;
+    productEntity: ProductEntity;
     quantity: number;
   }> {
-    const cart = await this.cartService.findOne(uuid);
-    checkUserPermission(user, cart.user.id);
-    this.cartService.assertCartIsAvailable(cart);
-    const product = await this.productService.findOne(dto.product);
+    const cartEntity = await this.cartService.findOne(uuid);
+    checkUserPermission(user, cartEntity.user.id);
+    this.cartService.assertCartIsAvailable(cartEntity);
+    const productEntity = await this.productService.findOne(dto.product);
     const quantity = dto.quantity;
-    return { cart, product, quantity };
+    return { cartEntity, productEntity, quantity };
   }
 }

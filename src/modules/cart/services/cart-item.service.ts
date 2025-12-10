@@ -13,51 +13,53 @@ export class CartItemService {
   ) {}
 
   public async increase(
-    cart: CartEntity,
-    product: ProductEntity,
+    cartEntity: CartEntity,
+    productEntity: ProductEntity,
     quantity: number,
   ): Promise<string> {
-    const existingItem = this.findItem(cart.items, product.id);
-    if (existingItem) {
-      existingItem.quantity += quantity;
-      await this.cartItemRepository.save(existingItem);
+    const cartItemEntity = this.findItem(cartEntity.items, productEntity.id);
+    if (cartItemEntity) {
+      cartItemEntity.quantity += quantity;
+      await this.cartItemRepository.save(cartItemEntity);
       return 'Item quantity successfully increased';
     }
     await this.cartItemRepository.save({
-      cart,
-      product,
+      cartEntity,
+      productEntity,
       quantity,
     });
     return 'Item successfully added to cart';
   }
 
   public async decrease(
-    cart: CartEntity,
-    product: ProductEntity,
+    cartEntity: CartEntity,
+    productEntity: ProductEntity,
     quantity: number,
   ): Promise<string> {
-    const existingItem = this.findItem(cart.items, product.id);
-    if (!existingItem) {
+    const cartItemEntity = this.findItem(cartEntity.items, productEntity.id);
+    if (!cartItemEntity) {
       throw new NotFoundException('Item not found in this cart');
     }
 
-    const newQuantity = existingItem.quantity - quantity;
+    const newQuantity = cartItemEntity.quantity - quantity;
     if (newQuantity <= 0) {
-      await this.cartItemRepository.delete(existingItem.id);
+      await this.cartItemRepository.delete(cartItemEntity.id);
       return 'Item successfully removed from cart';
     }
 
     await this.cartItemRepository.save({
-      ...existingItem,
+      ...cartItemEntity,
       quantity: newQuantity,
     });
     return 'Item quantity successfully decreased';
   }
 
   private findItem(
-    items: CartItemEntity[],
+    cartItemEntities: CartItemEntity[],
     uuid: string,
   ): CartItemEntity | undefined {
-    return items.find((item) => item.product.id === uuid);
+    return cartItemEntities.find(
+      (cartItemEntity) => cartItemEntity.product.id === uuid,
+    );
   }
 }

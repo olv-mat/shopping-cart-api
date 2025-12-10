@@ -12,7 +12,7 @@ export class OrderResponseMapper {
     return orderEntities.map((orderEntity) => this.toDto(orderEntity));
   }
 
-  private static toDto(orderEntity: OrderEntity): OrderResponseDto {
+  public static toDto(orderEntity: OrderEntity): OrderResponseDto {
     const { id, totalPrice, status } = orderEntity;
     return new OrderResponseDto(id, totalPrice, status);
   }
