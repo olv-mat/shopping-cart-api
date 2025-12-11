@@ -15,19 +15,19 @@ export class AuthService {
 
   public async authenticate(
     password: string,
-    user: UserEntity,
+    userEntity: UserEntity,
   ): Promise<string> {
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, userEntity.password);
     if (!isValidPassword) throw new UnauthorizedException('Invalid password');
-    return this.generateToken(user);
+    return this.generateToken(userEntity);
   }
 
-  public generateToken(user: UserEntity): string {
+  public generateToken(userEntity: UserEntity): string {
     const payload: UserInterface = {
-      sub: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
+      sub: userEntity.id,
+      name: userEntity.name,
+      email: userEntity.email,
+      role: userEntity.role,
     };
     return this.jwtService.sign(payload);
   }

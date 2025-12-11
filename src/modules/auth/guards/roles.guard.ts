@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { UserRoles } from 'src/modules/user/enums/user-roles.enum';
-import { ROLES_KEY } from '../decorators/roles.decorator';
+import { ROLES_KEY } from '../constants/roles-key.constant';
 
 /*
   Guard That Restricts Access To Routes Based On Roles. Reads Metadata Defined With 

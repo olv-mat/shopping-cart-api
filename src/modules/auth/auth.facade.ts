@@ -19,15 +19,15 @@ export class AuthFacade {
     dto: RegisterDto,
     admin: boolean,
   ): Promise<AuthResponseDto> {
-    const user = await this.userService.create(dto, admin);
-    const token = this.authService.generateToken(user);
-    if (!admin) await this.cartService.create(user);
-    return AuthMapper.toResponse(user.id, token);
+    const userEntity = await this.userService.create(dto, admin);
+    const token = this.authService.generateToken(userEntity);
+    if (!admin) await this.cartService.create(userEntity);
+    return AuthMapper.toResponse(userEntity.id, token);
   }
 
   public async login(dto: LoginDto): Promise<AuthResponseDto> {
-    const user = await this.userService.getUserByEmail(dto.email);
-    const token = await this.authService.authenticate(dto.password, user);
-    return AuthMapper.toResponse(user.id, token);
+    const userEntity = await this.userService.getUserByEmail(dto.email);
+    const token = await this.authService.authenticate(dto.password, userEntity);
+    return AuthMapper.toResponse(userEntity.id, token);
   }
 }

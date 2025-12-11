@@ -2,6 +2,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsString,
+  IsStrongPassword,
   Matches,
   MaxLength,
   MinLength,
@@ -32,9 +33,6 @@ export class RegisterDto {
   @IsString()
   @MinLength(8)
   @MaxLength(255)
-  @Matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).+$/, {
-    message:
-      'password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
-  })
+  @IsStrongPassword()
   public readonly password: string;
 }

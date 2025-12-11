@@ -1,6 +1,6 @@
 export class AuthResponseDto {
-  readonly sub: string;
-  readonly token: string;
+  public readonly sub: string;
+  public readonly token: string;
 
   constructor(sub: string, token: string) {
     this.sub = sub;
