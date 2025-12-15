@@ -1,6 +1,6 @@
 export class DefaultResponseDto {
-  readonly uuid: string;
-  readonly message: string;
+  public readonly uuid: string;
+  public readonly message: string;
 
   constructor(uuid: string, message: string) {
     this.uuid = uuid;

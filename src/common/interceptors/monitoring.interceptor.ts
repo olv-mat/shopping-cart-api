@@ -13,7 +13,10 @@ import { MonitoringService } from 'src/modules/monitoring/monitoring.service';
 export class MonitoringInterceptor implements NestInterceptor {
   constructor(private readonly monitoringService: MonitoringService) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  public intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
     const request = context.switchToHttp().getRequest();
     const method = request.method;
     const start = Date.now();

@@ -1,9 +1,9 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { swaggerSetup } from './config/swagger.config';
 import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 import { useContainer } from 'class-validator';
+import { AppModule } from './app.module';
 import { MonitoringInterceptor } from './common/interceptors/monitoring.interceptor';
+import { swaggerSetup } from './config/swagger.config';
 import { MonitoringService } from './modules/monitoring/monitoring.service';
 
 /*
@@ -29,4 +29,4 @@ async function bootstrap() {
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+void bootstrap();

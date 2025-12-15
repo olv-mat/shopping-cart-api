@@ -17,9 +17,8 @@ import { UserEntity } from 'src/modules/user/entities/user.entity';
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(private config: ConfigService) {}
-  createTypeOrmOptions(
-    connectionName?: string,
-  ): Promise<TypeOrmModuleOptions> | TypeOrmModuleOptions {
+
+  public createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
       type: 'postgres',
       host: this.config.get<'string'>('DB_HOST'),
