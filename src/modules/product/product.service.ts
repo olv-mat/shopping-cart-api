@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { validateUpdatePayload } from 'src/common/utils/validate-update-payload.util';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateProductDto } from './dtos/CreateProduct.dto';
 import { UpdateProductDto } from './dtos/UpdateProduct.dto';
 import { ProductEntity } from './entities/product.entity';
@@ -21,7 +21,16 @@ export class ProductService {
     category?: string;
     search?: string;
   }): Promise<ProductEntity[]> {
-    return this.productRepository.find();
+    return this.productRepository.find({
+      where: {
+        ...(filters.category && {
+          category: { category: filters.category },
+        }),
+        ...(filters.search && {
+          product: Like(`%${filters.search}%`),
+        }),
+      },
+    });
   }
 
   public findOne(uuid: string): Promise<ProductEntity> {
