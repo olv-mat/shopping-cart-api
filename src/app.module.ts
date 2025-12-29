@@ -1,14 +1,19 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypeOrmConfigService } from './config/typeorm.config.service';
-import { CategoryModule } from './modules/category/category.module';
-import { OrderModule } from './modules/order/order.module';
-import { ProductModule } from './modules/product/product.module';
-import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CartModule } from './modules/cart/cart.module';
+import { CartItemEntity } from './modules/cart/entities/cart-item.entity';
+import { CartEntity } from './modules/cart/entities/cart.entity';
+import { CategoryModule } from './modules/category/category.module';
+import { CategoryEntity } from './modules/category/entities/category.entity';
 import { MonitoringModule } from './modules/monitoring/monitoring.module';
+import { OrderEntity } from './modules/order/entities/order.entity';
+import { OrderModule } from './modules/order/order.module';
+import { ProductEntity } from './modules/product/entities/product.entity';
+import { ProductModule } from './modules/product/product.module';
+import { UserEntity } from './modules/user/entities/user.entity';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -16,7 +21,24 @@ import { MonitoringModule } from './modules/monitoring/monitoring.module';
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
-      useClass: TypeOrmConfigService,
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.getOrThrow('DATABASE_HOST'),
+        port: configService.getOrThrow('DATABASE_PORT'),
+        username: configService.getOrThrow('DATABASE_USERNAME'),
+        password: configService.getOrThrow('DATABASE_PASSWORD'),
+        database: configService.getOrThrow('DATABASE_NAME'),
+        entities: [
+          CartItemEntity,
+          CartEntity,
+          CategoryEntity,
+          OrderEntity,
+          ProductEntity,
+          UserEntity,
+        ],
+        synchronize: false,
+      }),
     }),
     CategoryModule,
     OrderModule,
@@ -27,6 +49,6 @@ import { MonitoringModule } from './modules/monitoring/monitoring.module';
     MonitoringModule,
   ],
   controllers: [],
-  providers: [TypeOrmConfigService],
+  providers: [],
 })
 export class AppModule {}

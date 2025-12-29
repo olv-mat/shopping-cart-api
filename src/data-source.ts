@@ -1,4 +1,4 @@
-import * as dotenv from 'dotenv';
+import 'dotenv/config';
 import { CartItemEntity } from 'src/modules/cart/entities/cart-item.entity';
 import { CartEntity } from 'src/modules/cart/entities/cart.entity';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
@@ -7,14 +7,19 @@ import { ProductEntity } from 'src/modules/product/entities/product.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { DataSource } from 'typeorm';
 
-dotenv.config();
-export const AppDataSource: DataSource = new DataSource({
+/* 
+  npm run migration:generate -- src/migrations/<migration>
+  npm run migration:run
+  npm run migration:generate
+*/
+
+export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: process.env.DB_HOST!,
-  port: parseInt(process.env.DB_PORT!),
-  username: process.env.DB_USERNAME!,
-  password: process.env.DB_PASSWORD!,
-  database: process.env.DB_DATABASE!,
+  host: process.env.DATABASE_HOST,
+  port: Number(process.env.DATABASE_PORT),
+  username: process.env.DATABASE_USERNAME,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
   entities: [
     CartItemEntity,
     CartEntity,
@@ -23,6 +28,6 @@ export const AppDataSource: DataSource = new DataSource({
     ProductEntity,
     UserEntity,
   ],
-  migrations: [__dirname + '/../migrations/**/*{.ts,.js}'],
+  migrations: [__dirname + '/migrations/*.{ts,js}'],
   synchronize: false,
 });
