@@ -11,11 +11,11 @@ import { UserInterface } from 'src/common/interfaces/user.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(config: ConfigService) {
+  constructor(configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: config.get<string>('JWT_SECRET')!,
+      secretOrKey: configService.getOrThrow('JWT_SECRET'),
     });
   }
 
