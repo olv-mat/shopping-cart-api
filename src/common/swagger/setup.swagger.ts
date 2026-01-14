@@ -13,7 +13,7 @@ export function swaggerSetup(app: INestApplication): void {
     .setDescription(
       `A NestJS-based API designed to manage a complete shopping cart system. 
       It includes modules for users, categories, products, orders, and carts, 
-      featuring JWT authentication and custom role handling.`.trim(),
+      featuring JWT authentication and RBAC.`.trim(),
     )
     .setVersion('1.0')
     .addBearerAuth()
