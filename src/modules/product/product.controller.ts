@@ -22,7 +22,7 @@ import {
   SwaggerNotFound,
   SwaggerOk,
   SwaggerUnauthorized,
-} from 'src/common/swagger/responses.swagger';
+} from 'src/common/settings/swagger/swagger.decorators';
 import { UuidDto } from '../../common/dtos/Uuid.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';

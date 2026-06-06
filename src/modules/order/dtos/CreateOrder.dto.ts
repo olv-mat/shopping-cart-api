@@ -1,5 +1,5 @@
 import { IsUUID } from 'class-validator';
-import { CartIdProperty } from 'src/common/swagger/properties.swagger';
+import { CartIdProperty } from 'src/common/settings/swagger/swagger.properties';
 
 export class CreateOrderDto {
   @CartIdProperty()

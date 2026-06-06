@@ -21,7 +21,7 @@ import {
   SwaggerNotFound,
   SwaggerOk,
   SwaggerUnauthorized,
-} from 'src/common/swagger/responses.swagger';
+} from 'src/common/settings/swagger/swagger.decorators';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { UserRoles } from '../user/enums/user-roles.enum';

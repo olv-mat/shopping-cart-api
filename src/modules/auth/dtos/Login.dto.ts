@@ -2,7 +2,7 @@ import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator';
 import {
   EmailProperty,
   PasswordProperty,
-} from 'src/common/swagger/properties.swagger';
+} from 'src/common/settings/swagger/swagger.properties';
 
 export class LoginDto {
   @EmailProperty()

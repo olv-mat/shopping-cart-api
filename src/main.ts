@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import { MonitoringInterceptor } from './common/interceptors/monitoring.interceptor';
-import { swaggerSetup } from './common/swagger/setup.swagger';
+import { swaggerSetup } from './common/settings/swagger/swagger.setup';
 import { MonitoringService } from './modules/monitoring/monitoring.service';
 
 /*

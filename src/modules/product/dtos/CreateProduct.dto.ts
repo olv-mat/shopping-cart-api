@@ -3,7 +3,7 @@ import {
   CategoryIdProperty,
   PriceProperty,
   ProductNameProperty,
-} from 'src/common/swagger/properties.swagger';
+} from 'src/common/settings/swagger/swagger.properties';
 import { CategoryExists } from '../validators/category-exists.decorator';
 
 export class CreateProductDto {

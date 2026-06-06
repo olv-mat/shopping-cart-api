@@ -8,7 +8,7 @@ import {
   SwaggerInternalServerError,
   SwaggerNotFound,
   SwaggerUnauthorized,
-} from 'src/common/swagger/responses.swagger';
+} from 'src/common/settings/swagger/swagger.decorators';
 import { UserRoles } from '../user/enums/user-roles.enum';
 import { AuthFacade } from './auth.facade';
 import { Roles } from './decorators/roles.decorator';

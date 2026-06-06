@@ -10,7 +10,7 @@ import {
   SwaggerNotFound,
   SwaggerOk,
   SwaggerUnauthorized,
-} from 'src/common/swagger/responses.swagger';
+} from 'src/common/settings/swagger/swagger.decorators';
 import { Roles } from 'src/modules/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 import { UserRoles } from 'src/modules/user/enums/user-roles.enum';

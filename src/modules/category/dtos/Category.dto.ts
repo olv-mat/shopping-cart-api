@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString, Matches, MaxLength } from 'class-validator';
-import { CategoryNameProperty } from 'src/common/swagger/properties.swagger';
+import { CategoryNameProperty } from 'src/common/settings/swagger/swagger.properties';
 
 // npm install class-validator class-transformer
 

@@ -3,7 +3,7 @@ import { ApiOperation } from '@nestjs/swagger';
 import {
   SwaggerInternalServerError,
   SwaggerOk,
-} from 'src/common/swagger/responses.swagger';
+} from 'src/common/settings/swagger/swagger.decorators';
 import { MonitoringService } from './monitoring.service';
 
 @Controller('monitoring')

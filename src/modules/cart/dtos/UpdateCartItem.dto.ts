@@ -2,7 +2,7 @@ import { IsInt, IsUUID, Min } from 'class-validator';
 import {
   ProductIdProperty,
   QuantityProperty,
-} from 'src/common/swagger/properties.swagger';
+} from 'src/common/settings/swagger/swagger.properties';
 
 export class UpdateCartItemDto {
   @ProductIdProperty()

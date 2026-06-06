@@ -11,7 +11,7 @@ import {
   EmailProperty,
   NameProperty,
   PasswordProperty,
-} from 'src/common/swagger/properties.swagger';
+} from 'src/common/settings/swagger/swagger.properties';
 
 export class RegisterDto {
   @NameProperty()
